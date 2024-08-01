@@ -11,8 +11,9 @@ def upload(request):
         user_id=1
         if file and user_id:
             video = videoFiles.objects.create(path=file, userId=user_id,cretaedAt=timezone.now())
-            # return HttpResponse(f"Upload started: {video.path.url}")
+            return JsonResponse({"msg":f"Uploaded: {video.path.url}"},status=200)
         else:
-            return HttpResponse("No file uploaded or userId missing", status=400)
-        
-    return HttpResponse("upload started")
+            return JsonResponse({"msg":"No file Found or userId missing"},status=400)
+    else:
+        return JsonResponse({"msg":"method not allowed"},status=405)
+          

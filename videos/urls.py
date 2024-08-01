@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.urls import path
 from .views.upload import upload
 from .views.getVideo import getVideos
-
+from .views.deleteVideo import deleteVideo
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('upload/',upload),
-    path('getVideos/',getVideos)
+    path('getVideos/',getVideos),
+    path("deleteVideo/",deleteVideo)
 ]
