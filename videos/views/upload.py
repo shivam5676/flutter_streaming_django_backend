@@ -10,7 +10,7 @@ def upload(request):
         file= request.FILES.get("videos12345")
         user_id=1
         if file and user_id:
-            video = videoFiles.objects.create(path=file, userId=user_id,cretaedAt=timezone.now())
+            video = videoFiles.objects.create(path=file, userId=user_id,createdAt=timezone.now())
             return JsonResponse({"msg":f"Uploaded: {video.path.url}"},status=200)
         else:
             return JsonResponse({"msg":"No file Found or userId missing"},status=400)
