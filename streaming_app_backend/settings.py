@@ -72,7 +72,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'streaming_app_backend.wsgi.application'
 
+from mongoengine import connect
 
+MONGODB_CONNECTION_STRING = "mongodb+srv://shivam:1234Shivam@cluster0.ugn8rkz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
+connect(
+    db='test',  # Replace with your database name
+    host=MONGODB_CONNECTION_STRING
+)
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
