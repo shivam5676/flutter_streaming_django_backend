@@ -22,7 +22,7 @@ def deleteVideo(request):
             video.delete()
             return JsonResponse({"msg": "data deleted successfully"}, status=200)
         except videoFiles.DoesNotExist:
-            return JsonResponse({"msg":"Video does not exist"},status=400)
+            return JsonResponse({"msg": "Video does not exist"}, status=400)
 
     else:
 
