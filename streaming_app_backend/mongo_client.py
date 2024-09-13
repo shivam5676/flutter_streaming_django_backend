@@ -11,3 +11,4 @@ db = client.get_database('test')  # This uses the default database from the URI
 sliders_collection = db.sliders
 movies_collection = db.movies
 shorts_collection = db.shorts
+layouts_collection = db.layouts
