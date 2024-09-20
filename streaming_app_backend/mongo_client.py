@@ -12,3 +12,5 @@ sliders_collection = db.sliders
 movies_collection = db.movies
 shorts_collection = db.shorts
 layouts_collection = db.layouts
+users_collection=db.users
+genre_collection=db.genres

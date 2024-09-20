@@ -13,7 +13,7 @@ def getMovieData(request):
         movieID = bodyData.get("movieID")
 
         data = movies_collection.find_one({"_id": ObjectId(movieID)})
-        print(data["shorts"], "ghghhg")
+        
         shorts = []
         if data and data["shorts"]:
             for currentShortsID in data["shorts"]:

@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     "videos",
     "slider",
+    "users",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -54,6 +55,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "streaming_app_backend.urls"
+
 
 TEMPLATES = [
     {
@@ -77,9 +79,7 @@ from mongoengine import connect
 
 MONGODB_URI = "mongodb+srv://shivam:1234Shivam@cluster0.ugn8rkz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
-# connect(db="test", host=MONGODB_CONNECTION_STRING)  # Replace with your database name
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
 
 DATABASES = {
     "default": {
