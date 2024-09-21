@@ -33,8 +33,8 @@ def getVideos(request):
             request.session["userSession"].extend(video_ids)
         else:
             request.session["userSession"] = video_ids
-        request.session.modified = True
-        request.session.save()
+            request.session.modified = True
+            request.session.save()
 
         print(video_ids)
         print(request.session)
