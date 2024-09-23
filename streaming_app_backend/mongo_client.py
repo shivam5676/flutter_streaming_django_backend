@@ -14,3 +14,4 @@ shorts_collection = db.shorts
 layouts_collection = db.layouts
 users_collection=db.users
 genre_collection=db.genres
+languages_collection=db.languages
