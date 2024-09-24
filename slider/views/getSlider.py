@@ -18,7 +18,7 @@ def getSliders(request):
     try:
         # Query all sliders
         sliders = sliders_collection.find(
-            {}, {"linkedMovie": 1, "schemaName": 1, "type": 1, "_id": 0}
+            {"visible":True}, {"linkedMovie": 1, "schemaName": 1, "type": 1, "_id": 0,"trailerUrl":1}
         )
 
         # Convert the cursor to a list of serialized dictionaries
@@ -32,12 +32,15 @@ def getSliders(request):
 
                 sliderData = movies_collection.find_one(
                     {"_id": ObjectId(currentSlider["linkedMovie"])},
-                    {"name": 1, "fileLocation": 1},
+                    {"name": 1, "fileLocation": 1,"trailerUrl":1,"parts":1},
                 )
                 if sliderData:
+                    print(sliderData)
 
                     sliderData["schemaName"] = currentSlider.get("schemaName", "")
                     sliderData["type"] = currentSlider.get("type", "")
+                    sliderData["trailerUrl"]=sliderData.get("trailerUrl")
+                    sliderData["parts"]=sliderData.get("parts")
                     # Serialize the sliderData before appending
 
                     serialized_sliders.append(serialize_document(sliderData))
