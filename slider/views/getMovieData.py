@@ -13,11 +13,24 @@ def getMovieData(request):
         movieID = bodyData.get("movieID")
 
         data = movies_collection.find_one({"_id": ObjectId(movieID)})
-        
+
         shorts = []
+
         if data and data["shorts"]:
+            print(data, "..printyadata")
+            trailerUrl = data.get("trailerUrl")
+            shorts.append(
+                {"trailerUrl": trailerUrl}
+            )  # later we will change this to fileLocation because now i am taking direct video serving link and for shorts we are using localhost:8765 so later we will replace localhost with direct link
+            # print(trailerUrl)
             for currentShortsID in data["shorts"]:
-                shortsData = shorts_collection.find_one({"_id": currentShortsID})
+                shortsData = shorts_collection.find_one(
+                    {
+                        "_id": currentShortsID,
+                    },
+                    {"genre": 0, "language": 0},
+                )
+
                 if shortsData:
                     # Convert ObjectId fields to strings in shortsData
                     shortsData["_id"] = str(shortsData["_id"])

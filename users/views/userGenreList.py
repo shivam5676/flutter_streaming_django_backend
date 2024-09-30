@@ -8,7 +8,7 @@ from streaming_app_backend.mongo_client import genre_collection
 def genreList(request):
     if request.method == "GET":
         genresArray = []
-        genrelist = genre_collection.find()
+        genrelist = genre_collection.find({},{"_id":1,"name":1,"icon":1})
         print(genrelist)
         for genre in genrelist:
             genre['_id']=str(genre['_id'])

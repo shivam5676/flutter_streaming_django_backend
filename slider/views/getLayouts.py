@@ -7,11 +7,12 @@ from django.http import JsonResponse
 def getLayouts(request):
     if request.method == "GET":
         layoutsResult = layouts_collection.find(
-            {"visible": 1}, {"_id": 1, "linkedMovies": 1, "name": 1}
+            {}, {"_id": 1, "linkedMovies": 1, "name": 1,"visible": 1}
         )
+       
         layOutsData = {}
         for layout in layoutsResult:
-            # print(layout["linkedMovies"], "LM")
+            print(layout, "LM")
             currentLayoutObj = []
             # Limit the linked movies to the first 6
             linkedMovies = layout["linkedMovies"][:6]
