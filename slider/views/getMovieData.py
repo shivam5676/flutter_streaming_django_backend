@@ -17,6 +17,11 @@ def getMovieData(request):
         shorts = []
 
         if data and data["shorts"]:
+            # Increment the 'views' field by 1
+            movies_collection.update_one(
+                {"_id": ObjectId(movieID)}, {"$inc": {"views": 1}}
+            )
+
             print(data, "..printyadata")
             trailerUrl = data.get("trailerUrl")
             shorts.append(

@@ -12,9 +12,11 @@ def createUser(request):
         except json.JSONDecodeError:
             return JsonResponse({"msg": "Invalid JSON"}, status=400)
         email = body.get("email")
+        name = body.get("name")
         password = body.get("password")
         confirmPassword = body.get("confirmPassword")
-
+        if not name:
+            return JsonResponse({"msg": "name is not present"},status=400)
         if not email:
             return JsonResponse({"msg": "email is not present"},status=400)
         if not password:
@@ -25,7 +27,7 @@ def createUser(request):
             return JsonResponse({"msg": "password and confirm password is not same"},status=400)
         
         userResponse = users_collection.insert_one(
-            {"email": email, "password": password, "name": "","loggedInBefore":False}
+            {"name":name,"email": email, "password": password,"loggedInBefore":False}
         )
         # userResponse["_id"]=str(userResponse["_id"])
         # print(userResponse)

@@ -5,6 +5,7 @@ from .views.usersGenreSelection import genreSelection
 from .views.usersLAnguageSelection import usersLanguaseSelection
 from .views.usersContentLanguageList import usersContentLanguageList
 from .views.userGenreList import genreList
+from .views.userTrendingMovies import UserTrendingVideos
 
 urlpatterns = [
     path("register/", createUser),
@@ -13,4 +14,5 @@ urlpatterns = [
     path("genreSelector/", genreSelection),
     path("languageList/", usersContentLanguageList),
     path("languageSelector/", usersLanguaseSelection),
+    path("trendingMovies/",UserTrendingVideos)
 ]
