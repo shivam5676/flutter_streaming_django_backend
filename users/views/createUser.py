@@ -30,7 +30,7 @@ def createUser(request):
             {"name":name,"email": email, "password": password,"loggedInBefore":False}
         )
         # userResponse["_id"]=str(userResponse["_id"])
-        # print(userResponse)
+        print(userResponse)
         if userResponse:
             return JsonResponse({"msg": "added user successfully", "success": True},status=201)
         else:
