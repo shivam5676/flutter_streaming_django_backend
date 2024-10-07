@@ -16,26 +16,38 @@ def createUser(request):
         password = body.get("password")
         confirmPassword = body.get("confirmPassword")
         if not name:
-            return JsonResponse({"msg": "name is not present"},status=400)
+            return JsonResponse({"msg": "name is not present"}, status=400)
         if not email:
-            return JsonResponse({"msg": "email is not present"},status=400)
+            return JsonResponse({"msg": "email is not present"}, status=400)
         if not password:
-            return JsonResponse({"msg": "password is not present"},status=400)
+            return JsonResponse({"msg": "password is not present"}, status=400)
         if not confirmPassword:
-            return JsonResponse({"msg": "confirm password is not present"},status=400)
+            return JsonResponse({"msg": "confirm password is not present"}, status=400)
         if password != confirmPassword:
-            return JsonResponse({"msg": "password and confirm password is not same"},status=400)
-        
+            return JsonResponse(
+                {"msg": "password and confirm password is not same"}, status=400
+            )
+
         userResponse = users_collection.insert_one(
-            {"name":name,"email": email, "password": password,"loggedInBefore":False}
+            {
+                "name": name,
+                "email": email,
+                "password": password,
+                "loggedInBefore": False,
+                "gender": "null",
+                "mobile": "null",
+            }
         )
         # userResponse["_id"]=str(userResponse["_id"])
         print(userResponse)
         if userResponse:
-            return JsonResponse({"msg": "added user successfully", "success": True},status=201)
+            return JsonResponse(
+                {"msg": "added user successfully", "success": True}, status=201
+            )
         else:
             return json(
-                {"msg": "something went wrong while creating user ", "success": False},status=400
+                {"msg": "something went wrong while creating user ", "success": False},
+                status=400,
             )
 
     else:
