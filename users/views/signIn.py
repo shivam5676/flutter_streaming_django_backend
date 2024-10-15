@@ -1,7 +1,11 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from streaming_app_backend.mongo_client import users_collection, genre_collection,languages_collection
+from streaming_app_backend.mongo_client import (
+    users_collection,
+    genre_collection,
+    languages_collection,
+)
 from bson import ObjectId
 
 
@@ -40,20 +44,25 @@ def signIn(request):
             if updateLoggedInStatus:
                 userResponse["_id"] = str(userResponse["_id"])
                 genreList = []
-                for genreId in userResponse["selectedGenre"]:
-                    genreData = genre_collection.find_one(
-                        {"_id": ObjectId(genreId)}, {"_id": 1, "name": 1, "icon": 1}
-                    )
-                    genreData["_id"] = str(genreData["_id"])
-                    genreList.append(genreData)
+                if "selectedGenre" in userResponse and userResponse["selectedGenre"]:
+                    for genreId in userResponse["selectedGenre"]:
+                        genreData = genre_collection.find_one(
+                            {"_id": ObjectId(genreId)}, {"_id": 1, "name": 1, "icon": 1}
+                        )
+                        genreData["_id"] = str(genreData["_id"])
+                        genreList.append(genreData)
                 userResponse["selectedGenre"] = genreList
                 languageList = []
-                for languageId in userResponse["selectedLanguages"]:
-                    languageData = languages_collection.find_one(
-                        {"_id": ObjectId(languageId)}, {"_id": 1, "name": 1}
-                    )
-                    languageData["_id"] = str(languageData["_id"])
-                    languageList.append(languageData)
+                if (
+                    "selectedLanguages" in userResponse
+                    and userResponse["selectedLanguages"]
+                ):
+                    for languageId in userResponse["selectedLanguages"]:
+                        languageData = languages_collection.find_one(
+                            {"_id": ObjectId(languageId)}, {"_id": 1, "name": 1}
+                        )
+                        languageData["_id"] = str(languageData["_id"])
+                        languageList.append(languageData)
                 userResponse["selectedLanguages"] = languageList
                 return JsonResponse(
                     {"msg": "successfully logged in  ", "userData": userResponse},
