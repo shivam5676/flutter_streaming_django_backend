@@ -91,16 +91,16 @@ from mongoengine import connect
 MONGODB_URI = "mongodb+srv://shivam:1234Shivam@cluster0.ugn8rkz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "flutterBackend",
-        "USER": "root",
-        "PASSWORD": "1234",
-        "HOST": "localhost",  # Set to 'localhost' if using local MySQL
-        "PORT": "3306",  # Default MySQL port
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "flutterBackend",
+#         "USER": "root",
+#         "PASSWORD": "1234",
+#         "HOST": "localhost",  # Set to 'localhost' if using local MySQL
+#         "PORT": "3306",  # Default MySQL port
+#     }
+# }
 
 
 # Password validation
