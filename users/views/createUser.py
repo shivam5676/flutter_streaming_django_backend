@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from streaming_app_backend.mongo_client import users_collection
+from datetime import datetime, timezone
 
 
 @csrf_exempt
@@ -27,7 +28,7 @@ def createUser(request):
             return JsonResponse(
                 {"msg": "password and confirm password is not same"}, status=400
             )
-
+        current_time = datetime.now(timezone.utc)
         userResponse = users_collection.insert_one(
             {
                 "name": name,
@@ -36,6 +37,8 @@ def createUser(request):
                 "loggedInBefore": False,
                 "gender": "null",
                 "mobile": "null",
+                "createdAt": current_time,  # created_at field
+                "updatedAt": current_time,  # updated_at field
             }
         )
         # userResponse["_id"]=str(userResponse["_id"])
