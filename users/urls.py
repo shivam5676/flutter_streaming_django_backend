@@ -10,6 +10,7 @@ from .views.shortTrendingSection import TrailerTrendingSection
 from .views.getProfileDetails import getProfileDetails
 from .views.editProfileDetails import editProfileDetails
 from .views.serachItem import serachItem
+from .views.dailyCheckinTask import dailyCheckInTask
 urlpatterns = [
     path("register/", createUser),
     path("signIn/", signIn),
@@ -21,6 +22,7 @@ urlpatterns = [
     path("trendingTrailers/", TrailerTrendingSection),
     path("getUserDetails/", getProfileDetails),
     path("editUserDetails/", editProfileDetails),
-    path("searchItem/",serachItem)
+    path("searchItem/",serachItem),
+    path("checkInTask/",dailyCheckInTask)
 ]
 

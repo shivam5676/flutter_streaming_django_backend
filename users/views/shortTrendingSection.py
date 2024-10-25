@@ -5,7 +5,7 @@ from streaming_app_backend.mongo_client import movies_collection, shorts_collect
 def TrailerTrendingSection(request):
     if request.method == "GET":
         moviesData = movies_collection.find(
-            {}, {"_id": 1, "name": 1, "shorts": 1, "trailerUrl": 1}
+            {}, {"_id": 1, "name": 1, "shorts": 1, "trailerUrl": 1, "fileLocation": 1}
         ).limit(10)
         moviesArray = []
         for movie in moviesData:

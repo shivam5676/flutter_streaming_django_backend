@@ -15,3 +15,5 @@ layouts_collection = db.layouts
 users_collection=db.users
 genre_collection=db.genres
 languages_collection=db.languages
+dailyCheckInTask=db.dailycheckintasks
+checkInPoints=db.checkinpoints

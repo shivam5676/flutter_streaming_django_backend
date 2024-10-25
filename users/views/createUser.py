@@ -1,7 +1,11 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from streaming_app_backend.mongo_client import users_collection
+from streaming_app_backend.mongo_client import (
+    users_collection,
+    checkInPoints,
+    dailyCheckInTask,
+)
 from datetime import datetime, timezone
 
 
@@ -41,9 +45,28 @@ def createUser(request):
                 "updatedAt": current_time,  # updated_at field
             }
         )
+        user_id = userResponse.inserted_id
+        print("Inserted user ID:", user_id)
         # userResponse["_id"]=str(userResponse["_id"])
-        print(userResponse)
+        print(userResponse, "userResponse")
         if userResponse:
+            checkInResponse = checkInPoints.find({}, {"_id": 1}).limit(10)
+            allotedTask = []
+            for index, checkInData in enumerate(checkInResponse):
+                print(checkInData, "cdata")
+                new_task = {
+                    "assignedTaskId": str(checkInData.get("_id")),
+                    "assignedUser": str(user_id),
+                    "status": "Pending" if index == 0 else "Alloted"
+                }
+                allotedTask.append(new_task)
+
+            dailyAllocationResponse = dailyCheckInTask.insert_many(allotedTask)
+            if dailyAllocationResponse:
+                users_collection.find_one_and_update(
+                    {"_id": user_id}, {"$set": {"assignedCheckInTask": 7}}
+                )
+            print(dailyAllocationResponse, "Dresponse........>")
             return JsonResponse(
                 {"msg": "added user successfully", "success": True}, status=201
             )
