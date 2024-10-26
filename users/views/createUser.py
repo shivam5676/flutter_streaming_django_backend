@@ -4,7 +4,7 @@ import json
 from streaming_app_backend.mongo_client import (
     users_collection,
     checkInPoints,
-    dailyCheckInTask,
+    dailyCheckInTask_collection,
 )
 from datetime import datetime, timezone
 
@@ -50,7 +50,7 @@ def createUser(request):
         # userResponse["_id"]=str(userResponse["_id"])
         print(userResponse, "userResponse")
         if userResponse:
-            checkInResponse = checkInPoints.find({}, {"_id": 1}).limit(10)
+            checkInResponse = checkInPoints.find({}, {"_id": 1}).limit(7)
             allotedTask = []
             for index, checkInData in enumerate(checkInResponse):
                 print(checkInData, "cdata")
@@ -61,7 +61,7 @@ def createUser(request):
                 }
                 allotedTask.append(new_task)
 
-            dailyAllocationResponse = dailyCheckInTask.insert_many(allotedTask)
+            dailyAllocationResponse = dailyCheckInTask_collection.insert_many(allotedTask)
             if dailyAllocationResponse:
                 users_collection.find_one_and_update(
                     {"_id": user_id}, {"$set": {"assignedCheckInTask": 7}}
