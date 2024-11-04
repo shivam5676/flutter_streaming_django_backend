@@ -12,6 +12,7 @@ from .views.editProfileDetails import editProfileDetails
 from .views.serachItem import serachItem
 from .views.dailyCheckinTask import dailyCheckInTask
 from .views.collectCheciNPoints import collectCheckInPoint
+
 urlpatterns = [
     path("register/", createUser),
     path("signIn/", signIn),
@@ -23,8 +24,7 @@ urlpatterns = [
     path("trendingTrailers/", TrailerTrendingSection),
     path("getUserDetails/", getProfileDetails),
     path("editUserDetails/", editProfileDetails),
-    path("searchItem/",serachItem),
-    path("checkInTask/",dailyCheckInTask),
-    path("collectCheckIn/",collectCheckInPoint)
+    path("searchItem/", serachItem),
+    path("checkInTask/", dailyCheckInTask),
+    path("collectCheckIn/", collectCheckInPoint),
 ]
-

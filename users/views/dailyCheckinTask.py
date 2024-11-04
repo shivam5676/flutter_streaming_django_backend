@@ -28,9 +28,9 @@ def dailyCheckInTask(request):
 
                 taskDetails = {
                     "taskId": str(task.get("_id")),
-                    "status":task.get('status'),
-                    **checkInPointsData
+                    "status": task.get("status"),
+                    **checkInPointsData,
                 }
                 taskList.append(taskDetails)
             print(taskList)
-        return JsonResponse({"msg": "checkIn Called","checkInTask":taskList})
+        return JsonResponse({"msg": "checkIn Called", "checkInTask": taskList})
