@@ -25,7 +25,7 @@ def signIn(request):
         if not password:
             return JsonResponse({"msg": "password is not present"}, status=400)
 
-        userResponse = users_collection.find_one({"email": email, "password": password})
+        userResponse = users_collection.find_one({"email": email, "password": password},{"password":0})
         # userResponse["_id"]=str(userResponse["_id"])
         print(userResponse)
         if not userResponse:
