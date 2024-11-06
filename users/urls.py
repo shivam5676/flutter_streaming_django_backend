@@ -12,7 +12,8 @@ from .views.editProfileDetails import editProfileDetails
 from .views.serachItem import serachItem
 from .views.dailyCheckinTask import dailyCheckInTask
 from .views.collectCheciNPoints import collectCheckInPoint
-
+from .views.markAsBookMark import markAsBookMark
+from .views.getBookMark import getBookMark
 urlpatterns = [
     path("register/", createUser),
     path("signIn/", signIn),
@@ -27,4 +28,6 @@ urlpatterns = [
     path("searchItem/", serachItem),
     path("checkInTask/", dailyCheckInTask),
     path("collectCheckIn/", collectCheckInPoint),
+    path("markBookMArk/", markAsBookMark),
+    path("getBookMArk/", getBookMark),
 ]
