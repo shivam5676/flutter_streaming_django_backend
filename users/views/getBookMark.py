@@ -19,7 +19,7 @@ def getBookMark(request):
             return JsonResponse({"msg": "no user found"}, status=400)
         try:
             print(user)
-            if user and user["BookMark"]:
+            if user and user.get("BookMark"):
 
                 bookMarkData = []
                 for shortsId in user["BookMark"]:
