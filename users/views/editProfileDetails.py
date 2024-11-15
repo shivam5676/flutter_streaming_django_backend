@@ -18,12 +18,14 @@ def editProfileDetails(request):
             userId = body.get("userId")
             userDetails = users_collection.find_one_and_update(
                 {"_id": ObjectId(userId)},
-                {"$set": {
-                    "email": email,
-                    "mobile": mobile,
-                    "name": name,
-                    "gender": gender
-                }},
+                {
+                    "$set": {
+                        "email": email,
+                        "mobile": mobile,
+                        "name": name,
+                        "gender": gender,
+                    }
+                },
             )
             print(userDetails)
             userDetails["_id"] = str(userDetails["_id"])
