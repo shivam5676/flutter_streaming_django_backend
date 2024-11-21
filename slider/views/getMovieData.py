@@ -24,8 +24,11 @@ def getMovieData(request):
 
             print(data, "..printyadata")
             trailerUrl = data.get("trailerUrl")
+            low=data.get("low")
+            medium=data.get("medium")
+            high=data.get("high")
             shorts.append(
-                {"trailerUrl": trailerUrl}
+                {"trailerUrl": trailerUrl,"low":low,"medium":medium,"high":high}
             )  # later we will change this to fileLocation because now i am taking direct video serving link and for shorts we are using localhost:8765 so later we will replace localhost with direct link
             # print(trailerUrl)
             for currentShortsID in data["shorts"]:
