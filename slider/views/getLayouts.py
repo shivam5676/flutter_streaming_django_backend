@@ -16,6 +16,7 @@ def getLayouts(request):
             currentLayoutObj = []
             # Limit the linked movies to the first 6
             linkedMovies = layout["linkedMovies"][:6]
+            print(linkedMovies,"lllllmovies")
             currentLayoutObj.append(
                 {"layoutId": str(layout["_id"]), "layoutName": layout["name"]}
             )
@@ -24,11 +25,12 @@ def getLayouts(request):
                 movieData = movies_collection.find_one(
                     {"_id": currentMovie}, {"fileLocation": 1, "name": 1}
                 )
-                # print(movieData)
-                movieData["_id"] = str(movieData["_id"])
+                print(movieData,"gjhgjhjhjgfhyd")
+                if(movieData):
+                    movieData["_id"] = str(movieData["_id"])
 
-                currentLayoutObj.append(movieData)
-            layOutsData[str(layout["_id"])] = currentLayoutObj
+                    currentLayoutObj.append(movieData)
+                layOutsData[str(layout["_id"])] = currentLayoutObj
         print(layOutsData)
         return JsonResponse({"layouts": layOutsData})
 
