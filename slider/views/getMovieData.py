@@ -16,7 +16,7 @@ def getMovieData(request):
 
         shorts = []
 
-        if data and data["shorts"]:
+        if data:
             # Increment the 'views' field by 1
             movies_collection.update_one(
                 {"_id": ObjectId(movieID)}, {"$inc": {"views": 1}}
@@ -31,21 +31,28 @@ def getMovieData(request):
                 {"trailerUrl": trailerUrl,"low":low,"medium":medium,"high":high}
             )  # later we will change this to fileLocation because now i am taking direct video serving link and for shorts we are using localhost:8765 so later we will replace localhost with direct link
             # print(trailerUrl)
-            for currentShortsID in data["shorts"]:
-                shortsData = shorts_collection.find_one(
-                    {
-                        "_id": currentShortsID,
-                    },
-                    {"genre": 0, "language": 0},
-                )
+            if data.get("shorts"):
+                for currentShortsID in data["shorts"]:
+                    if currentShortsID=="Ads":
+                        shorts.append({"type":"Promotional Ads"})
+                    else:
+                        if(isinstance(currentShortsID,str)):
+                          currentShortsID=ObjectId(currentShortsID)
+                        
+                        shortsData = shorts_collection.find_one(
+                            {
+                                "_id": currentShortsID,
+                            },
+                            {"genre": 0, "language": 0},
+                        )
 
-                if shortsData:
-                    # Convert ObjectId fields to strings in shortsData
-                    shortsData["_id"] = str(shortsData["_id"])
+                        if shortsData:
+                            # Convert ObjectId fields to strings in shortsData
+                            shortsData["_id"] = str(shortsData["_id"])
 
-                    # Add more fields to convert if needed
+                            # Add more fields to convert if needed
 
-                    shorts.append(shortsData)
+                            shorts.append(shortsData)
         return JsonResponse({"shortsData": shorts})
 
     # moviesData = movies_collection.find_one({_id: request.params.id})

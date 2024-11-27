@@ -19,9 +19,11 @@ def TrailerTrendingSection(request):
                         {"_id": shortid, "visible": True},
                         {"_id": 1, "name": 1, "fileLocation": 1},
                     )
-                    shortsData["_id"] = str(shortsData["_id"])
-                    shortsArray.append(shortsData)
-                    print(shortsData)
+                    # print(shortsData,"sddddd")
+                    if shortsData:
+                        shortsData["_id"] = str(shortsData["_id"])
+                        shortsArray.append(shortsData)
+                        print(shortsData)
             movie["shorts"] = shortsArray
             moviesArray.append(movie)
         return JsonResponse({"trailersData": moviesArray})
