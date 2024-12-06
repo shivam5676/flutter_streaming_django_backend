@@ -7,10 +7,12 @@ from streaming_app_backend.mongo_client import (
     languages_collection,
 )
 from bson import ObjectId
-
+from helper_function.tokenCreator import tokenCreator
 
 @csrf_exempt
 def signIn(request):
+    # tokenCreator({"name":"shivam","class":"9th"})
+    
     if request.method == "POST":
         try:
             body = json.loads(request.body)
@@ -41,8 +43,12 @@ def signIn(request):
                 {"_id": userResponse["_id"]}, {"$set": {"loggedInBefore": True}}
             )
             print(updateLoggedInStatus)
+            
             if updateLoggedInStatus:
-                userResponse["_id"] = str(userResponse["_id"])
+                token=tokenCreator({"id":str(userResponse["_id"])})
+                # tokenCreator(str(userResponse["_id"]))
+                print(token)
+                userResponse["_id"] = ""
                 genreList = []
                 if "selectedGenre" in userResponse and userResponse["selectedGenre"]:
                     for genreId in userResponse["selectedGenre"]:
@@ -65,7 +71,7 @@ def signIn(request):
                         languageList.append(languageData)
                 userResponse["selectedLanguages"] = languageList
                 return JsonResponse(
-                    {"msg": "successfully logged in  ", "userData": userResponse},
+                    {"msg": "successfully logged in", "userData": userResponse,"token":token},
                     status=200,
                 )
     else:
