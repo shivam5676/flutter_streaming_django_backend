@@ -12,6 +12,7 @@ from helper_function.tokenCreator import tokenCreator
 @csrf_exempt
 def signIn(request):
     # tokenCreator({"name":"shivam","class":"9th"})
+    # print(request.userId)
     
     if request.method == "POST":
         try:
@@ -29,7 +30,7 @@ def signIn(request):
 
         userResponse = users_collection.find_one({"email": email, "password": password},{"password":0})
         # userResponse["_id"]=str(userResponse["_id"])
-        print(userResponse)
+        # print(userResponse)
         if not userResponse:
             return JsonResponse(
                 {
@@ -42,12 +43,12 @@ def signIn(request):
             updateLoggedInStatus = users_collection.update_one(
                 {"_id": userResponse["_id"]}, {"$set": {"loggedInBefore": True}}
             )
-            print(updateLoggedInStatus)
+            # print(updateLoggedInStatus)
             
             if updateLoggedInStatus:
                 token=tokenCreator({"id":str(userResponse["_id"])})
                 # tokenCreator(str(userResponse["_id"]))
-                print(token)
+                # print(token)
                 userResponse["_id"] = ""
                 genreList = []
                 if "selectedGenre" in userResponse and userResponse["selectedGenre"]:

@@ -16,7 +16,7 @@ def UserTrendingVideos(request):
             .limit(10)
         )
         trending_movies_list = []
-        print(trending_movies)
+        # print(trending_movies)
         for movies in trending_movies:
             print(movies)
             

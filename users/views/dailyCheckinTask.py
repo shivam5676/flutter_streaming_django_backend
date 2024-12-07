@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 def dailyCheckInTask(request):
     if request.method == "POST":
         body = json.loads(request.body)
-        userId = body.get("userId")
+        userId = request.userId
         print(userId)
         checkInTask = dailyCheckInTask_collection.find({"assignedUser": userId})
         if not checkInTask:

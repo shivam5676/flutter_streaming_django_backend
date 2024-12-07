@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 def getBookMark(request):
     if request.method == "POST":
         body = json.loads(request.body)
-        userId = body.get("userId")
+        userId = request.userId
         # shortsId = body.get("shortsId")
         user = users_collection.find_one(
             {"_id": ObjectId(userId)},

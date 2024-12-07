@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 def markAsBookMark(request):
  if request.method == "POST":
     body = json.loads(request.body)
-    userId = body.get("userId")
+    userId = request.userId
     shortsId = body.get("shortsId")
     user = users_collection.update_one(
         {"_id": ObjectId(userId)}, {"$push": {"BookMark": shortsId}}

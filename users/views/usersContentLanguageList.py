@@ -9,7 +9,7 @@ def usersContentLanguageList(request):
     if request.method == "GET":
         languageArray = []
         languageList = languages_collection.find()
-        print(languageList)
+        
         for language in languageList:
             language['_id']=str(language['_id'])
             languageArray.append(language)

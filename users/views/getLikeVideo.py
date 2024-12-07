@@ -6,7 +6,7 @@ from bson import ObjectId
 
 def getLikedVideo(request):
     body = json.loads(request.body)
-    userId = body.get("userId")
+    userId = request.userId
     # shortsId = body.get("shortsId")
     user = users_collection.find_one(
         {"_id": ObjectId(userId)},

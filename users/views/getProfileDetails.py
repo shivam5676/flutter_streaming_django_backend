@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 def getProfileDetails(request):
     if request.method == "POST":
         body = json.loads(request.body)
-        userId = body.get("userId")
+        userId = request.userId
         userDetails = users_collection.find_one(
             {"_id": ObjectId(userId)},
             {"password": 0, "selectedGenre": 0, "selectedLanguages": 0},

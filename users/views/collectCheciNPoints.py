@@ -19,7 +19,7 @@ def collectCheckInPoint(request):
             return JsonResponse({"msg": "Invalid JSON format"}, status=400)
 
         taskId = body.get("taskId")
-        userId = body.get("userId")
+        userId = request.userId
 
         if not taskId:
             return JsonResponse({"msg": "No Task Id Is present"}, status=404)
