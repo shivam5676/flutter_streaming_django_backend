@@ -53,8 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # Ensure this is the first middleware
-    
-    
+
     "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -62,7 +61,8 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware","middleware.tokenAuthentication.access_token_authenticator",#middleware custom i cretaed 
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "middleware.tokenAuthentication.access_token_authenticator",#middleware custom i cretaed 
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [

@@ -15,6 +15,7 @@ from .views.collectCheciNPoints import collectCheckInPoint
 from .views.markAsBookMark import markAsBookMark
 from .views.getBookMark import getBookMark
 from .views.likeVideo import likeVideo
+from .views.getAds import getAds
 urlpatterns = [
     path("register/", createUser),
     path("signIn/", signIn),
@@ -32,4 +33,5 @@ urlpatterns = [
     path("markBookMark/", markAsBookMark),
     path("getBookMark/", getBookMark),
     path("likeVideo/", likeVideo),
+    path("getAds/<path>",getAds)
 ]

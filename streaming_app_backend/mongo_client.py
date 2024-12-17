@@ -17,3 +17,4 @@ genre_collection=db.genres
 languages_collection=db.languages
 dailyCheckInTask_collection=db.dailycheckintasks
 checkInPoints=db.checkinpoints
+adsCollection=db.ads

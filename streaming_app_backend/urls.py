@@ -21,8 +21,7 @@ from .views import testing
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns = [
-    
+urlpatterns = [   
     path("admin/", admin.site.urls),
     path("videos/", include("videos.urls")),
     path("user/",include("users.urls")),
