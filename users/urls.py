@@ -33,5 +33,5 @@ urlpatterns = [
     path("markBookMark/", markAsBookMark),
     path("getBookMark/", getBookMark),
     path("likeVideo/", likeVideo),
-    path("getAds/<path>",getAds)
+    path("getAds/<path>/<sessionType>",getAds)
 ]
