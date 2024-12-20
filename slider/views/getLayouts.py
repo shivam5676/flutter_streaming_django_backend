@@ -7,16 +7,18 @@ from django.http import JsonResponse
 def getLayouts(request):
     if request.method == "GET":
         layoutsResult = layouts_collection.find(
-            {}, {"_id": 1, "linkedMovies": 1, "name": 1,"visible": 1}
+            {}, {"_id": 1, "linkedMovies": 1, "name": 1, "visible": 1}
         )
-       
+
         layOutsData = {}
         for layout in layoutsResult:
             print(layout, "LM")
+            
             currentLayoutObj = []
             # Limit the linked movies to the first 6
-            linkedMovies = layout["linkedMovies"][:6]
-            print(linkedMovies,"lllllmovies")
+            linkedMovies = layout["linkedMovies"]
+            print(linkedMovies, "lllllmovies")
+            
             currentLayoutObj.append(
                 {"layoutId": str(layout["_id"]), "layoutName": layout["name"]}
             )
@@ -25,8 +27,9 @@ def getLayouts(request):
                 movieData = movies_collection.find_one(
                     {"_id": currentMovie}, {"fileLocation": 1, "name": 1}
                 )
-                print(movieData,"gjhgjhjhjgfhyd")
-                if(movieData):
+                print(movieData, "gjhgjhjhjgfhyd")
+                
+                if movieData:
                     movieData["_id"] = str(movieData["_id"])
 
                     currentLayoutObj.append(movieData)
