@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from datetime import datetime, timezone
 from streaming_app_backend.mongo_client import (
     users_collection,
     genre_collection,
@@ -9,11 +10,12 @@ from streaming_app_backend.mongo_client import (
 from bson import ObjectId
 from helper_function.tokenCreator import tokenCreator
 
+
 @csrf_exempt
 def signIn(request):
     # tokenCreator({"name":"shivam","class":"9th"})
     # print(request.userId)
-    
+
     if request.method == "POST":
         try:
             body = json.loads(request.body)
@@ -21,14 +23,22 @@ def signIn(request):
             return JsonResponse({"msg": "Invalid JSON"}, status=400)
         email = body.get("email")
         password = body.get("password")
-        # confirmPassword = body.get("confirmPassword")
+        fcmtoken = body.get("nId")  # notification id
+        deviceType = body.get("deviceType")
 
         if not email:
             return JsonResponse({"msg": "email is not present"}, status=400)
         if not password:
             return JsonResponse({"msg": "password is not present"}, status=400)
+        if not fcmtoken:
+            return JsonResponse(
+                {"msg": "please give us access for notification"}, status=400
+            )
+            
+        userResponse = users_collection.find_one(
+            {"email": email, "password": password}, {"password": 0}
+        )
 
-        userResponse = users_collection.find_one({"email": email, "password": password},{"password":0})
         # userResponse["_id"]=str(userResponse["_id"])
         # print(userResponse)
         if not userResponse:
@@ -43,13 +53,12 @@ def signIn(request):
             updateLoggedInStatus = users_collection.update_one(
                 {"_id": userResponse["_id"]}, {"$set": {"loggedInBefore": True}}
             )
+
             # print(updateLoggedInStatus)
-            
+
             if updateLoggedInStatus:
-                token=tokenCreator({"id":str(userResponse["_id"])})
-                # tokenCreator(str(userResponse["_id"]))
-                # print(token)
-                userResponse["_id"] = ""
+                token = tokenCreator({"id": str(userResponse["_id"])})
+
                 genreList = []
                 if "selectedGenre" in userResponse and userResponse["selectedGenre"]:
                     for genreId in userResponse["selectedGenre"]:
@@ -71,8 +80,60 @@ def signIn(request):
                         languageData["_id"] = str(languageData["_id"])
                         languageList.append(languageData)
                 userResponse["selectedLanguages"] = languageList
+                if not userResponse.get("Devices"):
+                    updatedResponse = users_collection.update_one(
+                        {"_id": ObjectId(userResponse["_id"])},
+                        {
+                            "$set": {
+                                "Devices": [
+                                    {
+                                        "fcmtoken": fcmtoken,
+                                        "deviceType": deviceType or "web",
+                                        "lastUpdated": datetime.now(timezone.utc),
+                                    }
+                                ]
+                            }
+                        },
+                    )
+                else:
+                    userDevices = userResponse.get("Devices")
+                    idIsPresent = False
+                    print("hello", userDevices)
+                    for device in userDevices:
+                        if device["fcmtoken"] == fcmtoken:
+                            idIsPresent = True
+
+                            break
+                    # for device in userDevices:
+                    # if
+                    if not idIsPresent:
+                        userDevices.append(
+                            {
+                                "fcmtoken": fcmtoken,
+                                "deviceType": deviceType,
+                                "lastUpdated": datetime.now(timezone.utc),
+                            }
+                        )
+                        updatedResponse = users_collection.update_one(
+                            {"_id": ObjectId(userResponse["_id"])},
+                            {"$set": {"Devices": userDevices}},
+                        )
+                        print(updatedResponse, "up>>>>>")
+                userResponse["Devices"] = [
+                    {
+                        "fcmtoken": fcmtoken,
+                        "deviceType": deviceType,
+                        "lastUpdated": datetime.now(timezone.utc),
+                    }
+                ]
+
+                userResponse["_id"] = ""
                 return JsonResponse(
-                    {"msg": "successfully logged in", "userData": userResponse,"token":token},
+                    {
+                        "msg": "successfully logged in",
+                        "userData": userResponse,
+                        "token": token,
+                    },
                     status=200,
                 )
     else:
