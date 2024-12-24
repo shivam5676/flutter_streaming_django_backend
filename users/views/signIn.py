@@ -34,7 +34,7 @@ def signIn(request):
             return JsonResponse(
                 {"msg": "please give us access for notification"}, status=400
             )
-            
+
         userResponse = users_collection.find_one(
             {"email": email, "password": password}, {"password": 0}
         )
