@@ -4,10 +4,11 @@ from .views.getMovieData import getMovieData
 from .views.getLayouts import getLayouts
 from .views.getDataRelatedToLayouts import getDataRelatedToLayOuts
 from django.contrib import admin
-
+from .views.refreshTheVideoURL import refreshTheVideoURL
 urlpatterns = [
     path("getSliders/", getSliders),
     path("getMovieData/", getMovieData),
     path("getLayouts/", getLayouts),
     path("getLayoutData/<movieID>", getDataRelatedToLayOuts),
+    path("rfVid",refreshTheVideoURL)
 ]

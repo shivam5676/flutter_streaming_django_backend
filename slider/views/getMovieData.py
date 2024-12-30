@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from streaming_app_backend.mongo_client import movies_collection, shorts_collection
 import json
 from bson import ObjectId
-
+from users.views.checkSignedVideo import checkSignedVideo
 
 @csrf_exempt
 def getMovieData(request):
@@ -28,7 +28,7 @@ def getMovieData(request):
             medium=data.get("medium")
             high=data.get("high")
             shorts.append(
-                {"trailerUrl": trailerUrl,"low":low,"medium":medium,"high":high}
+                {"trailerUrl": checkSignedVideo(trailerUrl) ,"low":checkSignedVideo(low),"medium":checkSignedVideo(medium),"high":checkSignedVideo(high)}
             )  # later we will change this to fileLocation because now i am taking direct video serving link and for shorts we are using localhost:8765 so later we will replace localhost with direct link
             # print(trailerUrl)
             if data.get("shorts"):
@@ -49,7 +49,10 @@ def getMovieData(request):
                         if shortsData:
                             # Convert ObjectId fields to strings in shortsData
                             shortsData["_id"] = str(shortsData["_id"])
-
+                            shortsData["low"]=checkSignedVideo(shortsData["low"])
+                            shortsData["medium"]=checkSignedVideo(shortsData["medium"])
+                            shortsData["high"]=checkSignedVideo(shortsData["high"])
+                            print(shortsData)
                             # Add more fields to convert if needed
 
                             shorts.append(shortsData)
