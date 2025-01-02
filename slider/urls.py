@@ -9,6 +9,6 @@ urlpatterns = [
     path("getSliders/", getSliders),
     path("getMovieData/", getMovieData),
     path("getLayouts/", getLayouts),
-    path("getLayoutData/<movieID>", getDataRelatedToLayOuts),
+    path("getLayoutData/<layoutID>", getDataRelatedToLayOuts),
     path("rfVid",refreshTheVideoURL)
 ]
