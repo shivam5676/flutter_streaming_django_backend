@@ -17,6 +17,7 @@ from .views.getBookMark import getBookMark
 from .views.likeVideo import likeVideo
 from .views.getAds import getAds
 from .views.checkSignedVideo import checkSignedVideo
+from helper_function.googleAuth import googleAuth
 
 urlpatterns = [
     path("register/", createUser),
@@ -37,4 +38,5 @@ urlpatterns = [
     path("likeVideo/", likeVideo),
     path("getAds/<path>/<sessionType>", getAds),
     path("checkSignedVideo/", checkSignedVideo),
+    path("googleAuth/", googleAuth),
 ]

@@ -13,6 +13,7 @@ def access_token_authenticator(get_response):
         excluded_paths = [
             "/user/signIn/",
             "/user/register/",
+            "/user/googleAuth/",
         ]  # Add paths to exclude here
 
         # Check if the request path is in the excluded list
@@ -21,12 +22,11 @@ def access_token_authenticator(get_response):
 
         if request.body:  # Check if body is not empty
             try:
-                
+
                 body_data = json.loads(request.body)
-                print(body_data, "Body data")  # Log body data (optional)    
+                print(body_data, "Body data")  # Log body data (optional)
             except Exception as err:
-                print(err)    
-            
+                print(err)
 
         token = request.headers.get("token")
 
@@ -37,7 +37,8 @@ def access_token_authenticator(get_response):
 
             # Attempt to decode the token using the secret and algorithm
             decodedToken = jwt.decode(token, "shivamssr", algorithms=["HS256"])
-            print(decodedToken, "dtoken")  # You can print or log the decoded token here
+            # You can print or log the decoded token here
+
             request.userId = decodedToken.get("id")
         except jwt.ExpiredSignatureError:
             # Token has expired

@@ -9,6 +9,7 @@ from streaming_app_backend.mongo_client import (
 )
 from bson import ObjectId
 from helper_function.tokenCreator import tokenCreator
+from helper_function.updateLoginStatus import updateLoginStatus
 
 
 @csrf_exempt
@@ -39,8 +40,6 @@ def signIn(request):
             {"email": email, "password": password}, {"password": 0}
         )
 
-        # userResponse["_id"]=str(userResponse["_id"])
-        # print(userResponse)
         if not userResponse:
             return JsonResponse(
                 {
@@ -50,91 +49,103 @@ def signIn(request):
                 status=400,
             )
         else:
-            updateLoggedInStatus = users_collection.update_one(
-                {"_id": userResponse["_id"]}, {"$set": {"loggedInBefore": True}}
-            )
+            try:
 
-            # print(updateLoggedInStatus)
-
-            if updateLoggedInStatus:
-                token = tokenCreator({"id": str(userResponse["_id"])})
-
-                genreList = []
-                if "selectedGenre" in userResponse and userResponse["selectedGenre"]:
-                    for genreId in userResponse["selectedGenre"]:
-                        genreData = genre_collection.find_one(
-                            {"_id": ObjectId(genreId)}, {"_id": 1, "name": 1, "icon": 1}
-                        )
-                        genreData["_id"] = str(genreData["_id"])
-                        genreList.append(genreData)
-                userResponse["selectedGenre"] = genreList
-                languageList = []
-                if (
-                    "selectedLanguages" in userResponse
-                    and userResponse["selectedLanguages"]
-                ):
-                    for languageId in userResponse["selectedLanguages"]:
-                        languageData = languages_collection.find_one(
-                            {"_id": ObjectId(languageId)}, {"_id": 1, "name": 1}
-                        )
-                        languageData["_id"] = str(languageData["_id"])
-                        languageList.append(languageData)
-                userResponse["selectedLanguages"] = languageList
-                if not userResponse.get("Devices"):
-                    updatedResponse = users_collection.update_one(
-                        {"_id": ObjectId(userResponse["_id"])},
-                        {
-                            "$set": {
-                                "Devices": [
-                                    {
-                                        "fcmtoken": fcmtoken,
-                                        "deviceType": deviceType or "web",
-                                        "lastUpdated": datetime.now(timezone.utc),
-                                    }
-                                ]
-                            }
-                        },
-                    )
-                else:
-                    userDevices = userResponse.get("Devices")
-                    idIsPresent = False
-                    print("hello", userDevices)
-                    for device in userDevices:
-                        if device["fcmtoken"] == fcmtoken:
-                            idIsPresent = True
-
-                            break
-                    # for device in userDevices:
-                    # if
-                    if not idIsPresent:
-                        userDevices.append(
-                            {
-                                "fcmtoken": fcmtoken,
-                                "deviceType": deviceType,
-                                "lastUpdated": datetime.now(timezone.utc),
-                            }
-                        )
-                        updatedResponse = users_collection.update_one(
-                            {"_id": ObjectId(userResponse["_id"])},
-                            {"$set": {"Devices": userDevices}},
-                        )
-                        print(updatedResponse, "up>>>>>")
-                userResponse["Devices"] = [
-                    {
-                        "fcmtoken": fcmtoken,
-                        "deviceType": deviceType,
-                        "lastUpdated": datetime.now(timezone.utc),
-                    }
-                ]
-
-                userResponse["_id"] = ""
+                updatedUserResponse, token = updateLoginStatus(
+                    userResponse, fcmtoken, deviceType
+                )
                 return JsonResponse(
                     {
                         "msg": "successfully logged in",
-                        "userData": userResponse,
+                        "userData": updatedUserResponse,
                         "token": token,
                     },
                     status=200,
                 )
+            except Exception as err:
+                return JsonResponse({"msg": str(err)})
+            # updateLoggedInStatus = users_collection.update_one(
+            #     {"_id": userResponse["_id"]}, {"$set": {"loggedInBefore": True}}
+            # )
+
+            # if updateLoggedInStatus:
+            #     token = tokenCreator({"id": str(userResponse["_id"])})
+
+            #     genreList = []
+            #     if "selectedGenre" in userResponse and userResponse["selectedGenre"]:
+            #         for genreId in userResponse["selectedGenre"]:
+            #             genreData = genre_collection.find_one(
+            #                 {"_id": ObjectId(genreId)}, {"_id": 1, "name": 1, "icon": 1}
+            #             )
+            #             genreData["_id"] = str(genreData["_id"])
+            #             genreList.append(genreData)
+            #     userResponse["selectedGenre"] = genreList
+            #     languageList = []
+            #     if (
+            #         "selectedLanguages" in userResponse
+            #         and userResponse["selectedLanguages"]
+            #     ):
+            #         for languageId in userResponse["selectedLanguages"]:
+            #             languageData = languages_collection.find_one(
+            #                 {"_id": ObjectId(languageId)}, {"_id": 1, "name": 1}
+            #             )
+            #             languageData["_id"] = str(languageData["_id"])
+            #             languageList.append(languageData)
+            #     userResponse["selectedLanguages"] = languageList
+            #     if not userResponse.get("Devices"):
+            #         updatedResponse = users_collection.update_one(
+            #             {"_id": ObjectId(userResponse["_id"])},
+            #             {
+            #                 "$set": {
+            #                     "Devices": [
+            #                         {
+            #                             "fcmtoken": fcmtoken,
+            #                             "deviceType": deviceType or "web",
+            #                             "lastUpdated": datetime.now(timezone.utc),
+            #                         }
+            #                     ]
+            #                 }
+            #             },
+            #         )
+            #     else:
+            #         userDevices = userResponse.get("Devices")
+            #         idIsPresent = False
+            #         print("hello", userDevices)
+            #         for device in userDevices:
+            #             if device["fcmtoken"] == fcmtoken:
+            #                 idIsPresent = True
+
+            #                 break
+
+            #         if not idIsPresent:
+            #             userDevices.append(
+            #                 {
+            #                     "fcmtoken": fcmtoken,
+            #                     "deviceType": deviceType,
+            #                     "lastUpdated": datetime.now(timezone.utc),
+            #                 }
+            #             )
+            #             updatedResponse = users_collection.update_one(
+            #                 {"_id": ObjectId(userResponse["_id"])},
+            #                 {"$set": {"Devices": userDevices}},
+            #             )
+            #             print(updatedResponse, "up>>>>>")
+            #     userResponse["Devices"] = [
+            #         {
+            #             "fcmtoken": fcmtoken,
+            #             "deviceType": deviceType,
+            #             "lastUpdated": datetime.now(timezone.utc),
+            #         }
+            #     ]
+
+            #     userResponse["_id"] = ""
+            # return JsonResponse(
+            #     {
+            #         "msg": "successfully logged in",
+            #         "userData": userResponse,
+            #         "token": token,
+            #     },
+            #     status=200,
+            # )
     else:
         return JsonResponse({"msg": "wrong method"})
