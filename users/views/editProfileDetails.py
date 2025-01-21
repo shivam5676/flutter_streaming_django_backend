@@ -15,7 +15,7 @@ def editProfileDetails(request):
             gender = body.get("gender")
             mobile = body.get("mobile")
             body = json.loads(request.body)
-            userId = request.userId
+            userId = body.get("userId")
             userDetails = users_collection.find_one_and_update(
                 {"_id": ObjectId(userId)},
                 {
