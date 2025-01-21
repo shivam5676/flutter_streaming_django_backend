@@ -15,7 +15,7 @@ def editProfileDetails(request):
             gender = body.get("gender")
             mobile = body.get("mobile")
             body = json.loads(request.body)
-            userId = body.get("userId")
+            userId = request.userId
             userDetails = users_collection.find_one_and_update(
                 {"_id": ObjectId(userId)},
                 {
@@ -29,7 +29,7 @@ def editProfileDetails(request):
             )
             print(userDetails)
             userDetails["_id"] = str(userDetails["_id"])
-            return JsonResponse({"userDetails": userDetails})
+            return JsonResponse({"msg": "data updated successFully..."})
         except json.JSONDecodeError:
             return JsonResponse({"msg": "Invalid JSON"}, status=400)
 

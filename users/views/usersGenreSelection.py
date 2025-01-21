@@ -13,7 +13,7 @@ def genreSelection(request):
         except json.JSONDecodeError:
             return JsonResponse({"msg": "Invalid JSON"}, status=400)
         selectedGenre = body.get("selectedGenre")
-        userId = body.get("userId")
+        userId = request.userId
         if len(selectedGenre) == 0:
             return JsonResponse(
                 {"msg": "no genre is selected,please select a genre"}, status=400
@@ -31,7 +31,7 @@ def genreSelection(request):
                 },
                 status=200,
             )
-        else :
+        else:
             return JsonResponse({"msg": "user is invalid"})
     else:
         return JsonResponse({"msg": "wrong method"})

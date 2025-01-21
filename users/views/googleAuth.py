@@ -13,20 +13,23 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def googleAuth(request):
     if request.method == "POST":
+        print("google uath is starting")
         try:
             body = json.loads(request.body)
         except json.JSONDecodeError:
             return JsonResponse({"msg": "Invalid JSON"}, status=400)
         fcmtoken = body.get("nId")  # notification id
         deviceType = body.get("deviceType")
-        token = body.get("token")
-        print(token)
+
+        print("starting", body)
+        authToken = body.get("authToken")
         try:
-            token = token
 
             CLIENT_ID = "483555861541-om8qaihdq8cl9bosvpqpus45q22e65a0.apps.googleusercontent.com"
-
-            idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
+            # CLIENT_ID = "711384080035-g77aj9ec6d0cnqpns28k6jttd16g1g6u.apps.googleusercontent.com"
+            idinfo = id_token.verify_oauth2_token(
+                authToken, requests.Request(), CLIENT_ID
+            )
             print(idinfo, "idinfo")
             issuer = idinfo.get("iss")
             expiration_time = idinfo.get("exp")
@@ -44,10 +47,11 @@ def googleAuth(request):
                 name = idinfo.get("name")
 
                 if userResponse:
-                    print("userResponse")
+
                     updatedUserResponse, token = updateLoginStatus(
                         userResponse, fcmtoken, deviceType
                     )
+                    print("userResponse", updatedUserResponse, token)
                     return JsonResponse(
                         {
                             "msg": "google authentication done......user is already registered with us",
@@ -56,6 +60,7 @@ def googleAuth(request):
                         }
                     )
                 else:
+                    print("signup starting")
                     password = "hexagonal"
                     savedUSer = saveUserInDataBase(
                         {"name": name, "email": email, "password": password}
@@ -63,11 +68,12 @@ def googleAuth(request):
                     getSavedUser = users_collection.find_one(
                         {"email": email}, {"password": 0}
                     )
+                    print(getSavedUser, "getuserrrrrrr", getSavedUser.get("_id"))
                     if getSavedUser:
                         updatedUserResponse, token = updateLoginStatus(
                             getSavedUser, fcmtoken, deviceType
                         )
-                        token = tokenCreator({"id": str(getSavedUser.get("_id"))})
+                        # token = tokenCreator({"id": str(getSavedUser.get("_id"))})
                         return JsonResponse(
                             {
                                 "msg": "google authentication done......registered a new account",
