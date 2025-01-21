@@ -36,7 +36,7 @@ def getSliders(request):
                     {"name": 1, "fileLocation": 1, "trailerUrl": 1, "parts": 1},
                 )
                 if sliderData:
-                    print(sliderData)
+                    
 
                     sliderData["schemaName"] = currentSlider.get("schemaName", "")
                     sliderData["type"] = currentSlider.get("type", "")

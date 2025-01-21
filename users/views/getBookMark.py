@@ -18,13 +18,12 @@ def getBookMark(request):
         if not user:
             return JsonResponse({"msg": "no user found"}, status=400)
         try:
-            print(user)
+         
             if user and user.get("BookMark"):
 
                 bookMarkData = []
                 for shortsId in user["BookMark"]:
-                    print(shortsId, "sid")
-                    print(shortsId)
+                  
                     if shortsId:
                         shortsData = shorts_collection.find_one(
                             {

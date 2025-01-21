@@ -16,13 +16,13 @@ def getDataRelatedToLayOuts(request, layoutID):
         for layout in result:
             # print(layout)
             linkedMovies = layout["linkedMovies"]
-            print(linkedMovies)
+            
             for currentMovieId in linkedMovies:
                 #   print(currentMovieId)
                 movieData = movies_collection.find_one(
                     {"_id": ObjectId(currentMovieId)}, {"fileLocation": 1, "name": 1}
                 )
-                print(movieData)
+                
                 if movieData:
                     movieData["_id"] = str(movieData["_id"])
                     movieObj.append(movieData)

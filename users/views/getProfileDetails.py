@@ -14,7 +14,7 @@ def getProfileDetails(request):
             {"_id": ObjectId(userId)},
             {"password": 0, "selectedGenre": 0, "selectedLanguages": 0},
         )
-        print(userDetails)
+        
         userDetails['_id']=str(userDetails['_id'])
         return JsonResponse({"userDetails": userDetails})
     else:

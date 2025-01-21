@@ -31,12 +31,12 @@ def collectCheckInPoint(request):
         )
         # print(taskIsPresent)
         if taskIsPresent:
-            print(taskIsPresent.get("_id"))
+        
             taskPoints = checkInPoints.find_one(
                 {"_id": ObjectId(taskIsPresent.get("assignedTaskId"))},
                 {"allocatedPoints": 1},
             )
-            print(taskPoints, "tp....")
+           
             if taskPoints:
                 addPointsToProfile(userId,taskPoints.get("allocatedPoints"))
                 return JsonResponse(

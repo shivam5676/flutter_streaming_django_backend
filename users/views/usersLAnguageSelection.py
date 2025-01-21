@@ -13,7 +13,8 @@ def usersLanguaseSelection(request):
         except json.JSONDecodeError:
             return JsonResponse({"msg": "Invalid JSON"}, status=400)
         selectedLanguages = body.get("selectedLanguages")
-        userId = body.get("userId")
+    
+        userId = request.userId
         if len(selectedLanguages) == 0:
             return JsonResponse(
                 {"msg": "no language is selected,please select a language first"},

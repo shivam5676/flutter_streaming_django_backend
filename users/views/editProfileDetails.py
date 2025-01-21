@@ -27,7 +27,7 @@ def editProfileDetails(request):
                     }
                 },
             )
-            print(userDetails)
+            
             userDetails["_id"] = str(userDetails["_id"])
             return JsonResponse({"msg": "data updated successFully..."})
         except json.JSONDecodeError:

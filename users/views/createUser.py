@@ -41,7 +41,7 @@ def createUser(request):
                 {"msg": "added user successfully", "success": True}, status=201
             )
         except Exception as err:
-            print(err)
+
             return JsonResponse(
                 {"msg": str(err), "success": False},
                 status=400,

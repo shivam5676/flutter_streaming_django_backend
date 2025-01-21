@@ -16,7 +16,7 @@ def markAsBookMark(request):
         {"_id": ObjectId(userId)}, {"$push": {"BookMark": shortsId}}
     )
 
-    print(user)
+    
 
     try:
         return JsonResponse({"msg": "video bookmarked"},status=200)

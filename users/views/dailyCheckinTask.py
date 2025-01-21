@@ -14,13 +14,13 @@ def dailyCheckInTask(request):
     if request.method == "POST":
         body = json.loads(request.body)
         userId = request.userId
-        print(userId)
+
         checkInTask = dailyCheckInTask_collection.find({"assignedUser": userId})
         if not checkInTask:
             return JsonResponse({"msg": "no task found"})
         taskList = []
         for task in checkInTask:
-            print(task)
+
             checkInPointsData = checkInPoints.find_one(
                 {"_id": ObjectId(task["assignedTaskId"])}, {"_id": 0}
             )
@@ -32,5 +32,5 @@ def dailyCheckInTask(request):
                     **checkInPointsData,
                 }
                 taskList.append(taskDetails)
-            print(taskList)
+
         return JsonResponse({"msg": "checkIn Called", "checkInTask": taskList})

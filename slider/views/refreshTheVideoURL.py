@@ -9,10 +9,10 @@ from django.views.decorators.csrf import csrf_exempt
 def refreshTheVideoURL(request):
    
     if request.method == "POST": 
-        print("hello",request.body.decode('utf-8'))
+        
         try:
             body = json.loads(request.body)
-            print(body)        
+                    
             data = checkSignedVideo(body.get("url"))
 
             return JsonResponse({"data": data}, status=200)

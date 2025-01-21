@@ -10,7 +10,7 @@ from users.views.checkSignedVideo import checkSignedVideo
 @csrf_exempt
 def getMovieData(request):
     if request.method == "POST":
-        print(request)
+       
         try:
             bodyData = json.loads(request.body)
         except Exception as err:
@@ -27,7 +27,7 @@ def getMovieData(request):
                 {"_id": ObjectId(movieID)}, {"$inc": {"views": 1}}
             )
 
-            print(data, "..printyadata")
+            
             trailerUrl = data.get("trailerUrl")
             low = data.get("low")
             medium = data.get("medium")
@@ -64,7 +64,7 @@ def getMovieData(request):
                                 shortsData.get("medium")
                             )
                             shortsData["high"] = checkSignedVideo(shortsData.get("high"))
-                            print(shortsData)
+                            
                             # Add more fields to convert if needed
 
                             shorts.append(shortsData)

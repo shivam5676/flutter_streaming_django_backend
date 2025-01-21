@@ -12,12 +12,12 @@ def getLayouts(request):
 
         layOutsData = {}
         for layout in layoutsResult:
-            print(layout, "LM")
+            
             
             currentLayoutObj = []
             # Limit the linked movies to the first 6
             linkedMovies = layout["linkedMovies"]
-            print(linkedMovies, "lllllmovies")
+            
             
             currentLayoutObj.append(
                 {"layoutId": str(layout["_id"]), "layoutName": layout["name"]}
@@ -27,14 +27,14 @@ def getLayouts(request):
                 movieData = movies_collection.find_one(
                     {"_id": currentMovie}, {"fileLocation": 1, "name": 1}
                 )
-                print(movieData, "gjhgjhjhjgfhyd")
+                
                 
                 if movieData:
                     movieData["_id"] = str(movieData["_id"])
 
                     currentLayoutObj.append(movieData)
                 layOutsData[str(layout["_id"])] = currentLayoutObj
-        print(layOutsData)
+        
         return JsonResponse({"layouts": layOutsData})
 
     return JsonResponse({"msg": "method not allowed"})

@@ -16,7 +16,7 @@ def likeVideo(request):
             {"_id": ObjectId(userId)}, {"$push": {"LikedVideos": shortsId}}
         )
 
-        print(user)
+        
 
         try:
             return JsonResponse({"msg": "video liked"}, status=200)

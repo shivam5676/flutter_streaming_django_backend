@@ -14,10 +14,10 @@ def serachItem(request):
             {"name": {"$regex": searchedItem, "$options": "i"}},
             {"_id": 1, "name": 1, "fileLocation": 1},
         )
-        print(searchedResult)
+        
         moviesList = []
         for data in searchedResult:
-            print(data)
+            
             data["_id"] = str(data.get("_id"))
             moviesList.append(data)
         if len(moviesList) == 0:

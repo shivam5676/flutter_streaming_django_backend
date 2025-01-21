@@ -19,14 +19,14 @@ def getLikedVideo(request):
 
             LikedVideosData = []
             for shortsId in user["LikedVideos"]:
-                print(shortsId)
+                
                 shortsData = shorts_collection.find_one(
                     {
                         "_id": ObjectId(shortsId),
                     },
                     {"genre": 0, "language": 0},
                 )
-                print(shortsData)
+               
                 if shortsData:
                     shortsData["_id"] = str(shortsData["_id"])
                     LikedVideosData.append(shortsData)

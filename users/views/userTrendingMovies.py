@@ -18,7 +18,7 @@ def UserTrendingVideos(request):
         trending_movies_list = []
         # print(trending_movies)
         for movies in trending_movies:
-            print(movies)
+            
             
             movies["_id"] = str(movies["_id"])
             trending_movies_list.append(movies)

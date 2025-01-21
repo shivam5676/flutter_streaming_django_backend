@@ -3,8 +3,7 @@ from streaming_app_backend.mongo_client import adsCollection
 
 
 def getAds(request, path,sessionType):
-    print(f"/{path.lower()}")
-    print(sessionType)
+
     if not path:
         return JsonResponse({"msg": "path is not present"}, status=400)
     pathname = f"/{path.lower()}"

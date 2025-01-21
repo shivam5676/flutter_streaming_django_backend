@@ -21,7 +21,6 @@ def googleAuth(request):
         fcmtoken = body.get("nId")  # notification id
         deviceType = body.get("deviceType")
 
-        print("starting", body)
         authToken = body.get("authToken")
         try:
 
@@ -30,11 +29,10 @@ def googleAuth(request):
             idinfo = id_token.verify_oauth2_token(
                 authToken, requests.Request(), CLIENT_ID
             )
-            print(idinfo, "idinfo")
+
             issuer = idinfo.get("iss")
             expiration_time = idinfo.get("exp")
             current_time = time.time()
-            print((expiration_time - time.time()) / 60)
 
             if idinfo and issuer == "https://accounts.google.com":
 
@@ -51,7 +49,7 @@ def googleAuth(request):
                     updatedUserResponse, token = updateLoginStatus(
                         userResponse, fcmtoken, deviceType
                     )
-                    print("userResponse", updatedUserResponse, token)
+
                     return JsonResponse(
                         {
                             "msg": "google authentication done......user is already registered with us",
@@ -62,13 +60,13 @@ def googleAuth(request):
                 else:
                     print("signup starting")
                     password = "hexagonal"
-                    savedUSer = saveUserInDataBase(
+                    saveUserInDataBase(
                         {"name": name, "email": email, "password": password}
                     )
                     getSavedUser = users_collection.find_one(
                         {"email": email}, {"password": 0}
                     )
-                    print(getSavedUser, "getuserrrrrrr", getSavedUser.get("_id"))
+                    
                     if getSavedUser:
                         updatedUserResponse, token = updateLoginStatus(
                             getSavedUser, fcmtoken, deviceType
