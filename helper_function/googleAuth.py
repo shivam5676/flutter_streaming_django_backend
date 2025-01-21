@@ -20,10 +20,11 @@ def googleAuth(request):
         fcmtoken = body.get("nId")  # notification id
         deviceType = body.get("deviceType")
         token = body.get("token")
+        print(token)
         try:
             token = token
 
-            CLIENT_ID = "711384080035-g77aj9ec6d0cnqpns28k6jttd16g1g6u.apps.googleusercontent.com"
+            CLIENT_ID = "483555861541-om8qaihdq8cl9bosvpqpus45q22e65a0.apps.googleusercontent.com"
 
             idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
             print(idinfo, "idinfo")

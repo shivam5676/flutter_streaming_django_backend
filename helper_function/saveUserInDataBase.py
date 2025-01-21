@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 
 def saveUserInDataBase(data):
-    print("calling",data)
+    print("calling", data)
     try:
         name = data.get("name")
         email = data.get("email")
@@ -27,9 +27,9 @@ def saveUserInDataBase(data):
             }
         )
         user_id = userResponse.inserted_id
-        print("Inserted user ID:", user_id)
+       
         # userResponse["_id"]=str(userResponse["_id"])
-        print(userResponse, "userResponse")
+       
         if userResponse:
             checkInResponse = checkInPoints.find({}, {"_id": 1}).limit(7)
             allotedTask = []
@@ -41,16 +41,16 @@ def saveUserInDataBase(data):
                     "status": "Pending" if index == 0 else "Alloted",
                 }
                 allotedTask.append(new_task)
-
-            dailyAllocationResponse = dailyCheckInTask_collection.insert_many(
-                allotedTask
-            )
-            if dailyAllocationResponse:
-                users_collection.find_one_and_update(
-                    {"_id": user_id}, {"$set": {"assignedCheckInTask": 7}}
+            if allotedTask:
+                dailyAllocationResponse = dailyCheckInTask_collection.insert_many(
+                    allotedTask
                 )
-            print(dailyAllocationResponse, "Dresponse........>")
-            return userResponse
+                if dailyAllocationResponse:
+                    users_collection.find_one_and_update(
+                        {"_id": user_id}, {"$set": {"assignedCheckInTask": 7}}
+                    )
+              
+                return userResponse
 
         else:
             print("no user response")
