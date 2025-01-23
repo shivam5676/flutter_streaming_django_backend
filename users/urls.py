@@ -17,7 +17,7 @@ from .views.getBookMark import getBookMark
 from .views.likeVideo import likeVideo
 from .views.getAds import getAds
 from .views.checkSignedVideo import checkSignedVideo
-from  .views.googleAuth import googleAuth
+from .views.googleAuth import googleAuth
 
 urlpatterns = [
     path("register/", createUser),

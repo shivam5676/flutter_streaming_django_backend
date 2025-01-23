@@ -11,9 +11,34 @@ from bson import ObjectId
 from helper_function.tokenCreator import tokenCreator
 from helper_function.updateLoginStatus import updateLoginStatus
 
+from rest_framework.decorators import api_view
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
+
+@swagger_auto_schema(
+    method="POST",
+    operation_description="This api will checkuser in database and give them access to use the app if they are registered with us. The request should contain user details like  email, and password.in response we will get a token for further accessing the app ",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            "email": openapi.Schema(type=openapi.TYPE_STRING, description="User email"),
+            "password": openapi.Schema(
+                type=openapi.TYPE_STRING, description="User password"
+            ),
+        },
+        required=["email", "password"],
+    ),
+    responses={
+        201: openapi.Response(description="User created successfully"),
+        400: openapi.Response(description="Invalid input or validation error"),
+    },
+    tags=["User"],
+)
+@api_view(["POST"])
 @csrf_exempt
 def signIn(request):
+
     # tokenCreator({"name":"shivam","class":"9th"})
     # print(request.userId)
 

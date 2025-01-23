@@ -8,12 +8,38 @@ from streaming_app_backend.mongo_client import (
 )
 from datetime import datetime, timezone
 from helper_function.saveUserInDataBase import saveUserInDataBase
+from rest_framework.decorators import api_view
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
+
+@swagger_auto_schema(
+    method="POST",
+    operation_description="Create a new user in the system. The request should contain user details like name, email, and password.",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'email': openapi.Schema(type=openapi.TYPE_STRING, description='User email'),
+            'name': openapi.Schema(type=openapi.TYPE_STRING, description='User name'),
+            'password': openapi.Schema(type=openapi.TYPE_STRING, description='User password'),
+            'confirmPassword': openapi.Schema(type=openapi.TYPE_STRING, description='Confirm password'),
+        },
+        required=['email', 'name', 'password', 'confirmPassword'],
+    ),
+    responses={
+        201: openapi.Response(description="User created successfully"),
+        400: openapi.Response(description="Invalid input or validation error"),
+    },
+    tags=['User']
+)
+
+@api_view(["POST"])
 @csrf_exempt
 def createUser(request):
     if request.method == "POST":
         try:
+            
             body = json.loads(request.body)
         except json.JSONDecodeError:
             return JsonResponse({"msg": "Invalid JSON"}, status=400)

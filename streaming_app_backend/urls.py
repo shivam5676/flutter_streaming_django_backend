@@ -20,10 +20,23 @@ from django.urls import path, include
 from .views import testing
 from django.conf import settings
 from django.conf.urls.static import static
+from .swagger import schema_view
+from django.urls import path, include, re_path
 
-urlpatterns = [   
+urlpatterns = [
     path("admin/", admin.site.urls),
     path("videos/", include("videos.urls")),
-    path("user/",include("users.urls")),
+    path("user/", include("users.urls")),
     path("", include("slider.urls")),
+    re_path(
+        r"^swagger(?P<format>\.json|\.yaml)$",
+        schema_view.without_ui(cache_timeout=0),
+        name="schema-json",
+    ),
+    path(
+        "swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
