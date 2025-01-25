@@ -60,11 +60,15 @@ def createUser(request):
                 {"msg": "password and confirm password is not same"}, status=400
             )
         try:
+            user=users_collection.find_one({"email":email})
+           
+            if user:
+                return JsonResponse({"msg":"user is already registered with us with this email"},status=400)
             userCreated = saveUserInDataBase(
                 {"name": name, "email": email, "password": password}
             )
             return JsonResponse(
-                {"msg": "added user successfully", "success": True}, status=201
+                {"msg": "added user successfully", "success": True}, status=200
             )
         except Exception as err:
 
@@ -118,4 +122,4 @@ def createUser(request):
         #     )
 
     else:
-        return JsonResponse({"msg": "wrong method"})
+        return JsonResponse({"msg": "wrong method"},status=500)

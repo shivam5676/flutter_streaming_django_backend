@@ -22,6 +22,8 @@ def googleAuth(request):
         deviceType = body.get("deviceType")
 
         authToken = body.get("authToken")
+        
+        print(fcmtoken,deviceType,authToken,"----------------------->")
         try:
 
             CLIENT_ID = "483555861541-om8qaihdq8cl9bosvpqpus45q22e65a0.apps.googleusercontent.com"

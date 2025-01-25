@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from streaming_app_backend.mongo_client import users_collection
+from streaming_app_backend.mongo_client import users_collection,genre_collection,languages_collection
 import json
 from bson import ObjectId
 from django.views.decorators.csrf import csrf_exempt
@@ -42,6 +42,29 @@ def getProfileDetails(request):
             if not userDetails:
                 return JsonResponse({"userDetails": []}, status=200)
             userDetails["_id"] = str(userDetails["_id"])
+
+            genreList = []
+            if "selectedGenre" in userDetails and userDetails["selectedGenre"]:
+                for genreId in userDetails["selectedGenre"]:
+                    genreData = genre_collection.find_one(
+                        {"_id": ObjectId(genreId)}, {"_id": 1, "name": 1, "icon": 1}
+                    )
+                    genreData["_id"] = str(genreData["_id"])
+                    genreList.append(genreData)
+            userDetails["selectedGenre"] = genreList
+            languageList = []
+
+            if (
+                "selectedLanguages" in userDetails
+                and userDetails["selectedLanguages"]
+            ):
+                for languageId in userDetails["selectedLanguages"]:
+                    languageData = languages_collection.find_one(
+                        {"_id": ObjectId(languageId)}, {"_id": 1, "name": 1}
+                    )
+                    languageData["_id"] = str(languageData["_id"])
+                    languageList.append(languageData)
+            userDetails["selectedLanguages"] = languageList
             return JsonResponse({"userDetails": userDetails}, status=200)
         except Exception as err:
             return JsonResponse({"msg": str(err)})
