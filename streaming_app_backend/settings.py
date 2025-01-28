@@ -60,7 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "middleware.tokenAuthentication.access_token_authenticator",  # middleware custom i cretaed
+    "middleware.tokenAuthentication.access_token_authenticator",  # middleware custom i created
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
@@ -146,3 +146,4 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 APPEND_SLASH = True
+CELERY_BROKER_URL = "redis://localhost:6379/0"

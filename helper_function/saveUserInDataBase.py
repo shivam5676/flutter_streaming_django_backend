@@ -4,16 +4,22 @@ from streaming_app_backend.mongo_client import (
     dailyCheckInTask_collection,
 )
 from django.http import JsonResponse
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 
 def saveUserInDataBase(data):
-    print("calling", data)
+   
     try:
         name = data.get("name")
         email = data.get("email")
         password = data.get("password")
         current_time = datetime.now(timezone.utc)
+
+        today = datetime.today()
+
+        # Add 7 days to today's date
+        new_date = today + timedelta(days=7)
+        next_allocation = new_date.strftime("%d/%m/%Y")
         userResponse = users_collection.insert_one(
             {
                 "name": name,
@@ -24,12 +30,13 @@ def saveUserInDataBase(data):
                 "mobile": "null",
                 "createdAt": current_time,  # created_at field
                 "updatedAt": current_time,  # updated_at field
+                "next_Allocation": next_allocation,
             }
         )
         user_id = userResponse.inserted_id
-       
+
         # userResponse["_id"]=str(userResponse["_id"])
-       
+
         if userResponse:
             checkInResponse = checkInPoints.find({}, {"_id": 1}).limit(7)
             allotedTask = []
@@ -49,7 +56,7 @@ def saveUserInDataBase(data):
                     users_collection.find_one_and_update(
                         {"_id": user_id}, {"$set": {"assignedCheckInTask": 7}}
                     )
-              
+
                 return userResponse
 
         else:

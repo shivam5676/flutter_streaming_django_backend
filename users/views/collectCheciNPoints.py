@@ -25,11 +25,14 @@ from drf_yasg.utils import swagger_auto_schema
             type=openapi.TYPE_STRING,  # Specifies that the type is a string
             required=True,  # Marks the token as required
         )
-    ],request_body=openapi.Schema(
+    ],
+    request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
-            "taskId": openapi.Schema(type=openapi.TYPE_STRING, description="current task id which you want to collect"),
-           
+            "taskId": openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description="current task id which you want to collect",
+            ),
         },
         required=["taskId"],
     ),
@@ -54,7 +57,7 @@ def collectCheckInPoint(request):
 
         taskId = body.get("taskId")
         userId = request.userId
-      
+
         if not taskId:
             return JsonResponse({"msg": "No Task Id Is present"}, status=404)
 
@@ -65,14 +68,14 @@ def collectCheckInPoint(request):
         )
         # print(taskIsPresent)
         if taskIsPresent:
-        
+
             taskPoints = checkInPoints.find_one(
                 {"_id": ObjectId(taskIsPresent.get("assignedTaskId"))},
                 {"allocatedPoints": 1},
             )
-           
+
             if taskPoints:
-                addPointsToProfile(userId,taskPoints.get("allocatedPoints"))
+                addPointsToProfile(userId, taskPoints.get("allocatedPoints"))
                 return JsonResponse(
                     {
                         "msg": "Task completed successfully",

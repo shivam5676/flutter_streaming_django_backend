@@ -20,7 +20,7 @@ def updateLoginStatus(userResponse, fcmtoken, deviceType):
             raise ValueError(
                 "unable to do login right now ....please retry and if problem comes again and again then contact adminstrator "
             )
-        print(updateLoggedInStatus)
+        
 
         if updateLoggedInStatus:
             
@@ -66,7 +66,7 @@ def updateLoginStatus(userResponse, fcmtoken, deviceType):
             else:
                 userDevices = userResponse.get("Devices")
                 idIsPresent = False
-                print("hello", userDevices)
+                
                 for device in userDevices:
                     if device["fcmtoken"] == fcmtoken:
                         idIsPresent = True
@@ -86,7 +86,7 @@ def updateLoginStatus(userResponse, fcmtoken, deviceType):
                         {"_id": ObjectId(userResponse["_id"])},
                         {"$set": {"Devices": userDevices}},
                     )
-                    print(updatedResponse, "up>>>>>")
+                
             userResponse["Devices"] = [
                 {
                     "fcmtoken": fcmtoken,
@@ -96,7 +96,7 @@ def updateLoginStatus(userResponse, fcmtoken, deviceType):
             ]
             
             userResponse["_id"] = ""
-            print("hello")
+           
             return userResponse, token
     except Exception as err:
         print(err)

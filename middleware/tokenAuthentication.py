@@ -15,6 +15,7 @@ def access_token_authenticator(get_response):
             "/user/register/",
             "/user/googleAuth/",
             "/user/googleAuth",
+            "/allotement/",
             "/swagger/",  # Exclude Swagger documentation path
             "/swagger-ui/",  # Another potential Swagger UI path
             "/redoc/",  # If you're using Redoc for API docs
