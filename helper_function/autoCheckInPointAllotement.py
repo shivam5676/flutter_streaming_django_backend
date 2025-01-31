@@ -1,13 +1,61 @@
-from streaming_app_backend.mongo_client import users_collection
+from streaming_app_backend.mongo_client import (
+    users_collection,
+    checkInPoints,
+    dailyCheckInTask_collection,
+    client,
+)
 from django.http import JsonResponse
 from datetime import datetime, timezone, timedelta
+from celery import shared_task
+from bson import ObjectId
 
 
+@shared_task()
 def autoCheckInPointAllotement(request):
+    print("task started", flush=True)
     current_date = datetime.today().strftime("%d/%m/%Y")
+    session = client.start_session()
+    session.start_transaction()
     try:
-        users_collection.find()
-        print(current_date)
 
+        users = users_collection.find(
+            {"next_Allocation": current_date}, {"_id": 1, "assignedCheckInTask": 1}
+        )
+
+        for user in users:
+            print(user.get("assignedCheckInTask"))
+            checkInResponse = (
+                checkInPoints.find({}, {"_id": 1})
+                .skip(user.get("assignedCheckInTask", 0))
+                .limit(7)
+            )
+            allotedTask = []
+            for index, checkInData in enumerate(checkInResponse):
+                print(checkInData, "cdata")
+                new_task = {
+                    "assignedTaskId": str(checkInData.get("_id")),
+                    "assignedUser": str(user.get("_id")),
+                    "status": "Pending" if index == 0 else "Alloted",
+                }
+                allotedTask.append(new_task)
+
+            if allotedTask:
+                dailyAllocationResponse = dailyCheckInTask_collection.insert_many(
+                    allotedTask, session=session
+                )
+                users_collection.update_one(
+                    {"_id": user["_id"]},
+                    {"$inc": {"assignedCheckInTask": 7}},
+                    session=session,
+                )
+
+        # raise ValueError("error in nothing")
+        session.commit_transaction()
+        # return JsonResponse({"msg": "err"})
     except Exception as err:
-        return JsonResponse({"msg": err})
+        print(err)
+        session.abort_transaction()
+
+    finally:
+        # End session
+        session.end_session()

@@ -11,6 +11,7 @@ def access_token_authenticator(get_response):
         # print("Inside the middleware",jwt.decode("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2M1NDA2NzcwMTRjMTMzNDlhMzdhNCJ9.wo_uoHy_WB3ZLPZNr9dCuEZ_CAbYvYviRKSVdBafVk0","shivamssr", algorithms=["HS256"]))
         # Process request here, for example, token authentication
         excluded_paths = [
+            "/check/",
             "/user/signIn/",
             "/user/register/",
             "/user/googleAuth/",

@@ -40,6 +40,8 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     "corsheaders",
     "drf_yasg",
+    'django_celery_beat',
+    # "helper_function",
     "videos",
     "slider",
     "users",
@@ -146,4 +148,9 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 APPEND_SLASH = True
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+# Celery Configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = MONGODB_URI + "/celery_results"
+
+# Timezone settings
+CELERY_TIMEZONE = "UTC"

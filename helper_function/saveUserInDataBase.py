@@ -8,7 +8,7 @@ from datetime import datetime, timezone, timedelta
 
 
 def saveUserInDataBase(data):
-   
+
     try:
         name = data.get("name")
         email = data.get("email")
@@ -56,7 +56,7 @@ def saveUserInDataBase(data):
                     users_collection.find_one_and_update(
                         {"_id": user_id}, {"$set": {"assignedCheckInTask": 7}}
                     )
-
+                # we will use this asigned task later at the time of assigning task to user for off limit to next 7 task
                 return userResponse
 
         else:
