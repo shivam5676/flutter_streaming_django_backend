@@ -11,9 +11,10 @@ from bson import ObjectId
 
 
 @shared_task()
-def autoCheckInPointAllotement(request):
+def autoCheckInPointAllotement():
     print("task started", flush=True)
     current_date = datetime.today().strftime("%d/%m/%Y")
+    next_allocation_date = (datetime.today() + timedelta(days=7)).strftime("%d/%m/%Y")
     session = client.start_session()
     session.start_transaction()
     try:
@@ -35,7 +36,10 @@ def autoCheckInPointAllotement(request):
                 new_task = {
                     "assignedTaskId": str(checkInData.get("_id")),
                     "assignedUser": str(user.get("_id")),
-                    "status": "Pending" if index == 0 else "Alloted",
+                    "status": "Pending" ,
+                    "obtainable": (datetime.today() + timedelta(days=index)).strftime(
+                        "%d/%m/%Y"
+                    ),
                 }
                 allotedTask.append(new_task)
 
@@ -45,7 +49,10 @@ def autoCheckInPointAllotement(request):
                 )
                 users_collection.update_one(
                     {"_id": user["_id"]},
-                    {"$inc": {"assignedCheckInTask": 7}},
+                    {
+                        "$inc": {"assignedCheckInTask": 7},
+                        "$set": {"next_Allocation": next_allocation_date},
+                    },  # Updating next 7 days date
                     session=session,
                 )
 

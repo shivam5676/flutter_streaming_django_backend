@@ -20,6 +20,7 @@ def saveUserInDataBase(data):
         # Add 7 days to today's date
         new_date = today + timedelta(days=7)
         next_allocation = new_date.strftime("%d/%m/%Y")
+        current_date = datetime.today()
         userResponse = users_collection.insert_one(
             {
                 "name": name,
@@ -30,7 +31,7 @@ def saveUserInDataBase(data):
                 "mobile": "null",
                 "createdAt": current_time,  # created_at field
                 "updatedAt": current_time,  # updated_at field
-                "next_Allocation": next_allocation,
+                # "next_Allocation": next_allocation,
             }
         )
         user_id = userResponse.inserted_id
@@ -38,23 +39,34 @@ def saveUserInDataBase(data):
         # userResponse["_id"]=str(userResponse["_id"])
 
         if userResponse:
-            checkInResponse = checkInPoints.find({}, {"_id": 1}).limit(7)
+            checkInResponse = list(checkInPoints.find({}, {"_id": 1}).limit(7))
+
             allotedTask = []
             for index, checkInData in enumerate(checkInResponse):
                 print(checkInData, "cdata")
                 new_task = {
                     "assignedTaskId": str(checkInData.get("_id")),
                     "assignedUser": str(user_id),
-                    "status": "Pending" if index == 0 else "Alloted",
+                    "status": "Pending" ,
+                    "obtainable": (current_date + timedelta(days=index)).strftime(
+                        "%d/%m/%Y"
+                    ),
                 }
                 allotedTask.append(new_task)
+
             if allotedTask:
                 dailyAllocationResponse = dailyCheckInTask_collection.insert_many(
                     allotedTask
                 )
                 if dailyAllocationResponse:
                     users_collection.find_one_and_update(
-                        {"_id": user_id}, {"$set": {"assignedCheckInTask": 7}}
+                        {"_id": user_id},
+                        {
+                            "$set": {
+                                "assignedCheckInTask": 7,
+                                "next_Allocation": next_allocation,
+                            }
+                        },
                     )
                 # we will use this asigned task later at the time of assigning task to user for off limit to next 7 task
                 return userResponse
