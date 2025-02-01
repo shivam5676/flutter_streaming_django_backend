@@ -11,7 +11,7 @@ from helper_function.saveUserInDataBase import saveUserInDataBase
 from rest_framework.decorators import api_view
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
+from helper_function.emailSender import emailSender
 
 
 @swagger_auto_schema(
@@ -20,26 +20,29 @@ from drf_yasg import openapi
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
-            'email': openapi.Schema(type=openapi.TYPE_STRING, description='User email'),
-            'name': openapi.Schema(type=openapi.TYPE_STRING, description='User name'),
-            'password': openapi.Schema(type=openapi.TYPE_STRING, description='User password'),
-            'confirmPassword': openapi.Schema(type=openapi.TYPE_STRING, description='Confirm password'),
+            "email": openapi.Schema(type=openapi.TYPE_STRING, description="User email"),
+            "name": openapi.Schema(type=openapi.TYPE_STRING, description="User name"),
+            "password": openapi.Schema(
+                type=openapi.TYPE_STRING, description="User password"
+            ),
+            "confirmPassword": openapi.Schema(
+                type=openapi.TYPE_STRING, description="Confirm password"
+            ),
         },
-        required=['email', 'name', 'password', 'confirmPassword'],
+        required=["email", "name", "password", "confirmPassword"],
     ),
     responses={
         201: openapi.Response(description="User created successfully"),
         400: openapi.Response(description="Invalid input or validation error"),
     },
-    tags=['User']
+    tags=["User"],
 )
-
 @api_view(["POST"])
 @csrf_exempt
 def createUser(request):
     if request.method == "POST":
         try:
-            
+
             body = json.loads(request.body)
         except json.JSONDecodeError:
             return JsonResponse({"msg": "Invalid JSON"}, status=400)
@@ -60,13 +63,17 @@ def createUser(request):
                 {"msg": "password and confirm password is not same"}, status=400
             )
         try:
-            user=users_collection.find_one({"email":email})
-           
+            user = users_collection.find_one({"email": email})
+
             if user:
-                return JsonResponse({"msg":"user is already registered with us with this email"},status=400)
+                return JsonResponse(
+                    {"msg": "user is already registered with us with this email"},
+                    status=400,
+                )
             userCreated = saveUserInDataBase(
                 {"name": name, "email": email, "password": password}
             )
+            emailSender({"name":name,"email": email})
             return JsonResponse(
                 {"msg": "added user successfully", "success": True}, status=200
             )
@@ -122,4 +129,4 @@ def createUser(request):
         #     )
 
     else:
-        return JsonResponse({"msg": "wrong method"},status=500)
+        return JsonResponse({"msg": "wrong method"}, status=500)

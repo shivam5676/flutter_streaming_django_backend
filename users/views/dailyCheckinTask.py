@@ -37,25 +37,29 @@ from drf_yasg.utils import swagger_auto_schema
 @csrf_exempt
 def dailyCheckInTask(request):
     if request.method == "POST":
+     try:
+            userId = request.userId
 
-        userId = request.userId
+            checkInTask = dailyCheckInTask_collection.find({"assignedUser": userId})
+            if not checkInTask:
+                return JsonResponse({"msg": "no task found"})
+            taskList = []
+            for task in checkInTask:
 
-        checkInTask = dailyCheckInTask_collection.find({"assignedUser": userId})
-        if not checkInTask:
-            return JsonResponse({"msg": "no task found"})
-        taskList = []
-        for task in checkInTask:
+                checkInPointsData = checkInPoints.find_one(
+                    {"_id": ObjectId(task["assignedTaskId"])}, {"_id": 0}
+                )
+                if checkInPointsData:
 
-            checkInPointsData = checkInPoints.find_one(
-                {"_id": ObjectId(task["assignedTaskId"])}, {"_id": 0}
-            )
-            if checkInPointsData:
+                    taskDetails = {
+                        "taskId": str(task.get("_id")),
+                        "status": task.get("status"),
+                        "obtainable": task.get("obtainable"),
+                        **checkInPointsData,
+                    }
+                    taskList.append(taskDetails)
 
-                taskDetails = {
-                    "taskId": str(task.get("_id")),
-                    "status": task.get("status"),
-                    **checkInPointsData,
-                }
-                taskList.append(taskDetails)
-
-        return JsonResponse({"msg": "checkIn Called", "checkInTask": taskList})
+            return JsonResponse({"msg": "checkIn Called", "checkInTask": taskList})
+     except Exception as err:
+         return JsonResponse({"msg": err})
+        

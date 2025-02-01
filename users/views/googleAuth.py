@@ -8,6 +8,7 @@ from helper_function.saveUserInDataBase import saveUserInDataBase
 from helper_function.updateLoginStatus import updateLoginStatus
 import json
 from django.views.decorators.csrf import csrf_exempt
+from helper_function.emailSender import emailSender
 
 
 @csrf_exempt
@@ -22,8 +23,8 @@ def googleAuth(request):
         deviceType = body.get("deviceType")
 
         authToken = body.get("authToken")
-        
-        print(fcmtoken,deviceType,authToken,"----------------------->")
+
+        print(fcmtoken, deviceType, authToken, "----------------------->")
         try:
 
             CLIENT_ID = "483555861541-om8qaihdq8cl9bosvpqpus45q22e65a0.apps.googleusercontent.com"
@@ -68,12 +69,13 @@ def googleAuth(request):
                     getSavedUser = users_collection.find_one(
                         {"email": email}, {"password": 0}
                     )
-                    
+
                     if getSavedUser:
                         updatedUserResponse, token = updateLoginStatus(
                             getSavedUser, fcmtoken, deviceType
                         )
                         # token = tokenCreator({"id": str(getSavedUser.get("_id"))})
+                        emailSender({"name":name,"email": email, "type": "direct"})
                         return JsonResponse(
                             {
                                 "msg": "google authentication done......registered a new account",

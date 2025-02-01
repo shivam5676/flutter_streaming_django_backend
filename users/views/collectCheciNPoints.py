@@ -12,6 +12,7 @@ from .addPointsToProfile import addPointsToProfile
 from drf_yasg import openapi
 from rest_framework.decorators import api_view
 from drf_yasg.utils import swagger_auto_schema
+from datetime import datetime, timezone, timedelta
 
 
 @swagger_auto_schema(
@@ -58,39 +59,74 @@ def collectCheckInPoint(request):
         taskId = body.get("taskId")
         userId = request.userId
 
+      
+
         if not taskId:
             return JsonResponse({"msg": "No Task Id Is present"}, status=404)
-
+        if not userId:
+             return JsonResponse({"msg": "Invalid user "}, status=404)
         # Try to update the task status to "Completed"
-        taskIsPresent = dailyCheckInTask_collection.find_one_and_update(
-            {"_id": ObjectId(taskId), "assignedUser": userId, "status": "Pending"},
-            {"$set": {"status": "Completed"}},
+        current_date_str = datetime.today().strftime("%d/%m/%Y")
+        taskPresent = dailyCheckInTask_collection.find_one(
+            {
+                "_id": ObjectId(taskId),
+                "assignedUser": userId,
+                "status": "Pending",
+            }
         )
-        # print(taskIsPresent)
-        if taskIsPresent:
+        if not taskPresent:
+            return JsonResponse({"msg": "Task not found"}, status=404)
+        
+        
+        obtainable_str = taskPresent.get("obtainable")  # e.g., "31/01/2025"
+        # current_date_str = "01/02/2025"  # Example current date
 
-            taskPoints = checkInPoints.find_one(
-                {"_id": ObjectId(taskIsPresent.get("assignedTaskId"))},
-                {"allocatedPoints": 1},
+        # Convert to datetime objects
+        obtainable = datetime.strptime(obtainable_str, "%d/%m/%Y")
+        current_date = datetime.strptime(current_date_str, "%d/%m/%Y")
+
+
+        if current_date >= obtainable:
+            taskIsPresent = dailyCheckInTask_collection.find_one_and_update(
+                {
+                    "_id": ObjectId(taskId),
+                    "assignedUser": userId,
+                    "status": "Pending",
+                },
+                {"$set": {"status": "Completed"}},
             )
+            # print(taskIsPresent)
+            if taskIsPresent:
 
-            if taskPoints:
-                addPointsToProfile(userId, taskPoints.get("allocatedPoints"))
-                return JsonResponse(
-                    {
-                        "msg": "Task completed successfully",
-                        "allocatedPoints": taskPoints.get("allocatedPoints"),
-                    },
-                    status=200,
+                taskPoints = checkInPoints.find_one(
+                    {"_id": ObjectId(taskIsPresent.get("assignedTaskId"))},
+                    {"allocatedPoints": 1},
                 )
+
+                if taskPoints:
+                    addPointsToProfile(userId, taskPoints.get("allocatedPoints"))
+                    return JsonResponse(
+                        {
+                            "msg": "Task completed successfully",
+                            "allocatedPoints": taskPoints.get("allocatedPoints"),
+                        },
+                        status=200,
+                    )
+                else:
+                    return JsonResponse(
+                        {"msg": "Points data not found for this task"}, status=404
+                    )
+
             else:
                 return JsonResponse(
-                    {"msg": "Points data not found for this task"}, status=404
+                    {"msg": "No task found or task already completed"}, status=404
                 )
 
         else:
             return JsonResponse(
-                {"msg": "No task found or task already completed"}, status=404
+                {
+                    "msg": "You can not collect upcoming Task Points before its obtainable date"
+                },status=400
             )
 
-    return JsonResponse({"msg": "Invalid request method"}, status=405)
+    return JsonResponse({"msg": "Invalid request method"}, status=500)

@@ -154,3 +154,14 @@ CELERY_RESULT_BACKEND = MONGODB_URI + "/celery_results"
 
 # Timezone settings
 CELERY_TIMEZONE = "UTC"
+
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'appteam@omr.co.in'  # Replace with your Gmail
+EMAIL_HOST_PASSWORD = 'pdqz ldyq dqjo gxid'  # Replace with App Password (not your Gmail password)
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
