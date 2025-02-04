@@ -2,7 +2,7 @@ from django.core.mail import EmailMultiAlternatives
 
 
 def emailSender(data):
-    name=data.get("name","user")
+    name = data.get("name", "user")
     try:
         subject = "Reeloid : Account Registration Successful"
         from_email = "appteam@omr.co.in"  # Replace with your Gmail
