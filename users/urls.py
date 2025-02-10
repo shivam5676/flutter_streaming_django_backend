@@ -39,4 +39,5 @@ urlpatterns = [
     path("getAds/<path>/<sessionType>", getAds),
     path("checkSignedVideo/", checkSignedVideo),
     path("googleAuth/", googleAuth),
+    
 ]
