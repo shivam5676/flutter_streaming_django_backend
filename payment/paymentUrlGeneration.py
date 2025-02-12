@@ -4,9 +4,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 # ✅ Use Correct Test Credentials
-PAYU_KEY = "LOz08k"
-PAYU_SALT = "hyW3KX2FIDeb9biTaqRj8QHKIkeMuOCj"
-PAYU_URL = "https://secure.payu.in/_payment"
+PAYU_KEY = "61Cs1H"
+PAYU_SALT = "L1CeWVdYlg8jVhJFxuSnB1TO8UgcjubF"
+PAYU_URL = "https://test.payu.in/_payment"
 
 
 def generate_hash(data):
@@ -21,12 +21,13 @@ def paymentUrlGeneration(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
+            print(data)
             txnid = data.get("txnid")  # Unique transaction ID
             amount = data.get("amount")
             email = data.get("email")
             phone = data.get("phone")
             firstname = data.get("firstname")
-            productinfo = "Test Product"
+            productinfo = data.get("productinfo") or "not provided"
 
             # ✅ Ensure all required parameters are included
             hash_data = {
@@ -37,8 +38,8 @@ def paymentUrlGeneration(request):
                 "firstname": firstname,
                 "email": email,
                 "phone": phone,
-                "surl": "https://yourdomain.com/payment-success/",
-                "furl": "https://yourdomain.com/payment-failure/",
+                "surl": "http://192.168.1.64:8000/payment/success/",
+                "furl": "https://192.168.1.64:8000yourdomain.com/payment/error/",
             }
             hash_data["hash"] = generate_hash(hash_data)
 

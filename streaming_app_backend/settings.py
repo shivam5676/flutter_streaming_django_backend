@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "videos",
     "slider",
     "users",
+    "payment",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # Ensure this is the first middleware
@@ -65,9 +67,13 @@ MIDDLEWARE = [
     "middleware.tokenAuthentication.access_token_authenticator",  # middleware custom i created
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS=[
+    "token","content-type"
+]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",  # Frontend origin
     "http://192.168.1.57:8000",  # Backend origin if required
+    "http://127.0.0.1:3000"
 ]
 ROOT_URLCONF = "streaming_app_backend.urls"
 
