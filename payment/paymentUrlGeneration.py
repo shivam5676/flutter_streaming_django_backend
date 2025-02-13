@@ -2,6 +2,8 @@ import hashlib
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from streaming_app_backend.mongo_client import paidMintsBuyerCollection, client
+from datetime import datetime
 
 # ✅ Use Correct Test Credentials
 PAYU_KEY = "61Cs1H"
@@ -17,8 +19,10 @@ def generate_hash(data):
 
 @csrf_exempt
 def paymentUrlGeneration(request):
-    """Generate PayU Payment Request"""
+    # """Generate PayU Payment Request"""
+
     if request.method == "POST":
+
         try:
             data = json.loads(request.body)
             print(data)
@@ -28,8 +32,14 @@ def paymentUrlGeneration(request):
             phone = data.get("phone")
             firstname = data.get("firstname")
             productinfo = data.get("productinfo") or "not provided"
-
+            userId = request.userId
             # ✅ Ensure all required parameters are included
+            if not txnid:
+                print(txnid)
+                return JsonResponse({"msg": "invalid txn id"}, status=400)
+            if not amount:
+                print(amount)
+                return JsonResponse({"msg": "invalid amount"}, status=400)
             hash_data = {
                 "key": PAYU_KEY,
                 "txnid": txnid,
@@ -42,7 +52,21 @@ def paymentUrlGeneration(request):
                 "furl": "https://192.168.1.64:8000yourdomain.com/payment/error/",
             }
             hash_data["hash"] = generate_hash(hash_data)
-
-            return JsonResponse({"payu_url": PAYU_URL, "params": hash_data})
+            try:
+                paidMintsBuyerCollection.insert_one(
+                    {
+                        "userId": userId,
+                        "txnid": txnid,
+                        "amount": amount,
+                        "date": datetime.now(),
+                        "status": "Pending",
+                    },
+                )
+                return JsonResponse(
+                    {"payu_url": PAYU_URL, "params": hash_data}, status=200
+                )
+            except Exception as err:
+                print(err)
+                raise ValueError("err while saving transaction data in database")
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)

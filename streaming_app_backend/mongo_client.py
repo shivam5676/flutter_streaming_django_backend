@@ -18,3 +18,4 @@ languages_collection=db.languages
 dailyCheckInTask_collection=db.dailycheckintasks
 checkInPoints=db.checkinpoints
 adsCollection=db.ads
+paidMintsBuyerCollection=db.paidMintsBuyer

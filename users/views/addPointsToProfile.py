@@ -8,7 +8,7 @@ def addPointsToProfile(userId, allotedPoints):
         updateUser = users_collection.update_one(
             {"_id": ObjectId(userId)},  # Ensure userId is an ObjectId
             {
-                "$inc": {"allocatedPoints": allotedPoints}
+                "$inc": {"allocatedPoints": int(allotedPoints)}
             },  # Increment or initialize allocatedPoints
             upsert=True,  # Insert a new document if none matches
         )
@@ -17,6 +17,7 @@ def addPointsToProfile(userId, allotedPoints):
         if updateUser.acknowledged:
             return {"success": True, "data": updateUser.raw_result}
         else:
-            return {"success": False, "error": "Failed to update points."}
+            raise ValueError("Failed to update points.")
+            # return {"success": False, "error": "Failed to update points."}
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        raise ValueError(str(e))

@@ -72,7 +72,7 @@ CORS_ALLOW_HEADERS=[
 ]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",  # Frontend origin
-    "http://192.168.1.57:8000",  # Backend origin if required
+    "http://192.168.1.64:8000",  # Backend origin if required
     "http://127.0.0.1:3000"
 ]
 ROOT_URLCONF = "streaming_app_backend.urls"
