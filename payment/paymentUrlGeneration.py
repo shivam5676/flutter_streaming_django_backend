@@ -48,8 +48,8 @@ def paymentUrlGeneration(request):
                 "firstname": firstname,
                 "email": email,
                 "phone": phone,
-                "surl": "http://192.168.1.64:8000/payment/success/",
-                "furl": "https://192.168.1.64:8000yourdomain.com/payment/error/",
+                "surl": "http://192.168.1.62:8000/payment/success/",
+                "furl": "https://192.168.1.62:8000yourdomain.com/payment/error/",
             }
             hash_data["hash"] = generate_hash(hash_data)
             try:
@@ -60,6 +60,8 @@ def paymentUrlGeneration(request):
                         "amount": amount,
                         "date": datetime.now(),
                         "status": "Pending",
+                        "couponApplied": "test100",
+                        
                     },
                 )
                 return JsonResponse(
