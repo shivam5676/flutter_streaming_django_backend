@@ -18,7 +18,7 @@ from .views.likeVideo import likeVideo
 from .views.getAds import getAds
 from .views.checkSignedVideo import checkSignedVideo
 from .views.googleAuth import googleAuth
-
+from .views.getPackage import getPackage
 urlpatterns = [
     path("register/", createUser),
     path("signIn/", signIn),
@@ -38,6 +38,7 @@ urlpatterns = [
     path("likeVideo/", likeVideo),
     path("getAds/<path>/<sessionType>", getAds),
     path("checkSignedVideo/", checkSignedVideo),
+    path("getPackage/", getPackage),
     path("googleAuth/", googleAuth),
     
 ]
