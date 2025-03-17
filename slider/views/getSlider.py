@@ -32,7 +32,7 @@ def getSliders(request):
                 # Query the linked movie using its ObjectId
 
                 sliderData = movies_collection.find_one(
-                    {"_id": ObjectId(currentSlider["linkedMovie"])},
+                    {"_id": ObjectId(currentSlider["linkedMovie"]),"visible": True},
                     {"name": 1, "fileLocation": 1, "trailerUrl": 1, "parts": 1},
                 )
                 if sliderData:
