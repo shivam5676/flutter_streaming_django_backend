@@ -10,14 +10,14 @@ from users.views.checkSignedVideo import checkSignedVideo
 @csrf_exempt
 def getMovieData(request):
     if request.method == "POST":
-       
+
         try:
             bodyData = json.loads(request.body)
         except Exception as err:
             print(err, "err")
         movieID = bodyData.get("movieID")
 
-        data = movies_collection.find_one({"_id": ObjectId(movieID)})
+        data = movies_collection.find_one({"_id": ObjectId(movieID), "visible": True})
 
         shorts = []
 
@@ -27,7 +27,6 @@ def getMovieData(request):
                 {"_id": ObjectId(movieID)}, {"$inc": {"views": 1}}
             )
 
-            
             trailerUrl = data.get("trailerUrl")
             low = data.get("low")
             medium = data.get("medium")
@@ -50,9 +49,7 @@ def getMovieData(request):
                             currentShortsID = ObjectId(currentShortsID)
 
                         shortsData = shorts_collection.find_one(
-                            {
-                                "_id": currentShortsID,
-                            },
+                            {"_id": currentShortsID, "visible": True},
                             {"genre": 0, "language": 0},
                         )
 
@@ -63,12 +60,14 @@ def getMovieData(request):
                             shortsData["medium"] = checkSignedVideo(
                                 shortsData.get("medium")
                             )
-                            shortsData["high"] = checkSignedVideo(shortsData.get("high"))
-                            
+                            shortsData["high"] = checkSignedVideo(
+                                shortsData.get("high")
+                            )
+
                             # Add more fields to convert if needed
 
                             shorts.append(shortsData)
-        return JsonResponse({"shortsData": shorts},status=200)
+        return JsonResponse({"shortsData": shorts}, status=200)
 
     # moviesData = movies_collection.find_one({_id: request.params.id})
-    return JsonResponse({"msg": "method not allowed"},status=500)
+    return JsonResponse({"msg": "method not allowed"}, status=500)
