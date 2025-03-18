@@ -99,5 +99,5 @@ def updateLoginStatus(userResponse, fcmtoken, deviceType):
            
             return userResponse, token
     except Exception as err:
-        print(err)
+        
         raise ValueError(str(err))

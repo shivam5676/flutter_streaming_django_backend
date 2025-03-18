@@ -20,3 +20,4 @@ checkInPoints = db.checkinpoints
 adsCollection = db.ads
 paidMintsBuyerCollection = db.paidMintsBuyer
 mintsPlanCollection = db.mintsplans
+videoPurchasedLogs=db.videoPurchasedLogs
