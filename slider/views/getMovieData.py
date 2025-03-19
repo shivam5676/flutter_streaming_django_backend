@@ -62,7 +62,10 @@ def getMovieData(request):
                         else:
                             if isinstance(currentShortsID, str):
                                 currentShortsID = ObjectId(currentShortsID)
-                            if userPoints > videosPointsSpend:
+                            print(userPoints)
+                            # we will check if the current fetched video is present in purchase log history or not if not then we  will deduct a point else we we will not
+                            purchased = checkPurchasedVideoData(currentShortsID, userId)
+                            if userPoints > videosPointsSpend or purchased:
                                 shortsData = shorts_collection.find_one(
                                     {"_id": currentShortsID, "visible": True},
                                     {"genre": 0, "language": 0},
@@ -80,22 +83,23 @@ def getMovieData(request):
                                     shortsData["high"] = checkSignedVideo(
                                         shortsData.get("high")
                                     )
-                                    purchased = checkPurchasedVideoData(
-                                        currentShortsID, userId
-                                    )
-                                    print(purchased)
+                                    # # we will check if the current fetched video is present in purchase log history or not if not then we  will deduct a point else we we will not
+
                                     if not purchased:
                                         videosPointsSpend += 1
 
                                 # Add more fields to convert if needed
                                 shorts.append(shortsData)
                                 videoPurchasedLogs.insert_one(
-                                    {"shorts_Id": currentShortsID, "user_Id": userId}
+                                    {
+                                        "shorts_Id": currentShortsID,
+                                        "user_Id": ObjectId(userId),
+                                    }
                                 )
                             else:
                                 shorts.append(
                                     {
-                                        "_id": "Insufficient Point",  # this hardcoded data is very necesaary to display the ui in frontend so if u changes it here then changes in frontend too
+                                        "_id": "Insufficient Point",  # this hardcoded data is very necesaary to display the ui in frontend so if u changes it here then changes it in frontend too
                                         "low": "Insufficient Point",
                                         "medium": "Insufficient Point",
                                         "high": "Insufficient Point",
@@ -104,7 +108,7 @@ def getMovieData(request):
                     users_collection.update_one(
                         {"_id": ObjectId(userId)},
                         {"$inc": {"allocatedPoints": -videosPointsSpend}},
-                    )
+                    )  # we are saving the latest deduction point after getting all the urls
             return JsonResponse({"shortsData": shorts}, status=200)
         except Exception as err:
             print(err, "err")
