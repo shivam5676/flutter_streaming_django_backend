@@ -7,12 +7,12 @@ from ..models import adsVideos
 @csrf_exempt
 def getVideos(request):
     if request.method == "GET":
-        print("Session ID:", request.COOKIES.get("sessionid"))
-        print(request.headers)
+        
+        
 
         # return JsonResponse({"msg":"testing"})
         excludedIds = request.session.get("userSession", [])
-        print(excludedIds, "ids")
+        
         videoFileResponse = (
             videoFiles.objects.exclude(id__in=excludedIds).order_by("?").values()[:5]
         )
@@ -36,8 +36,7 @@ def getVideos(request):
             request.session.modified = True
             request.session.save()
 
-        print(video_ids)
-        print(request.session)
+        
         return JsonResponse({"data": video_data}, status=200)
 
     else:

@@ -48,7 +48,7 @@ def access_token_authenticator(get_response):
             # Attempt to decode the token using the secret and algorithm
             decodedToken = jwt.decode(token, "shivamssr", algorithms=["HS256"])
             # You can print or log the decoded token here
-            print(decodedToken, "decu")
+          
             request.userId = decodedToken.get("id")
         except jwt.ExpiredSignatureError:
             # Token has expired

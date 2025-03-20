@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def addAdsVideo(request):
     if request.method == "POST":
-        print(request.FILES)
+        
         file = request.FILES.get("adVideo12345")
         userId = 1
         if file and userId:

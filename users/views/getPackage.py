@@ -6,12 +6,12 @@ def getPackage(request):
     if request.method == "GET":
         try:
             mintsPlanResponse = mintsPlanCollection.find()
-            print(mintsPlanResponse)
+           
             mintsPlanList = []
             if not mintsPlanResponse:
                 return JsonResponse({"data": []}, status=200)
             for plans in mintsPlanResponse:
-                print(plans)
+                
                 plans["_id"] = str(plans.get("_id"))
                 mintsPlanList.append(plans)
             return JsonResponse({"mintsPlanList": mintsPlanList}, status=200)

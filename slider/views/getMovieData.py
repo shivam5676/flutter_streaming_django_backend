@@ -62,7 +62,7 @@ def getMovieData(request):
                         else:
                             if isinstance(currentShortsID, str):
                                 currentShortsID = ObjectId(currentShortsID)
-                            print(userPoints)
+                            
                             # we will check if the current fetched video is present in purchase log history or not if not then we  will deduct a point else we we will not
                             purchased = checkPurchasedVideoData(currentShortsID, userId)
                             if userPoints > videosPointsSpend or purchased:

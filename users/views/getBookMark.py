@@ -36,7 +36,7 @@ def getBookMark(request):
     if request.method == "GET":
 
         userId = request.userId
-        print(userId)
+        
         user = users_collection.find_one(
             {"_id": ObjectId(userId)},
         )
@@ -50,7 +50,7 @@ def getBookMark(request):
                 for shortsId in user["BookMark"]:
 
                     if shortsId:
-                        print(shortsId)
+
                         if ObjectId.is_valid(shortsId):
 
                             shortsData = shorts_collection.find_one(
@@ -63,8 +63,7 @@ def getBookMark(request):
                             if shortsData:
                                 shortsData["_id"] = str(shortsData["_id"])
                                 bookMarkData.append(shortsData)
-                    else:
-                        print("invalid short id")
+
                 return JsonResponse(
                     {"msg": "bookmarked data is here", "bookMarkData": bookMarkData},
                     status=200,

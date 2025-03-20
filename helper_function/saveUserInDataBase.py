@@ -47,7 +47,7 @@ def saveUserInDataBase(data):
 
             allotedTask = []
             for index, checkInData in enumerate(checkInResponse):
-                print(checkInData, "cdata")
+               
                 new_task = {
                     "assignedTaskId": str(checkInData.get("_id")),
                     "assignedUser": str(user_id),
@@ -76,7 +76,7 @@ def saveUserInDataBase(data):
                 return userResponse
 
         else:
-            print("no user response")
+          
             raise ValueError(" something went wrong while creating user")
 
     except Exception as err:

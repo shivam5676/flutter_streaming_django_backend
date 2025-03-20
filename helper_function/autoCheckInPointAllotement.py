@@ -12,7 +12,7 @@ from bson import ObjectId
 
 @shared_task()
 def autoCheckInPointAllotement():
-    print("task started", flush=True)
+
     current_date = datetime.today().strftime("%d/%m/%Y")
     next_allocation_date = (datetime.today() + timedelta(days=7)).strftime("%d/%m/%Y")
     session = client.start_session()
@@ -24,7 +24,7 @@ def autoCheckInPointAllotement():
         )
 
         for user in users:
-            print(user.get("assignedCheckInTask"))
+      
             checkInResponse = (
                 checkInPoints.find({}, {"_id": 1})
                 .skip(user.get("assignedCheckInTask", 0))
@@ -32,7 +32,7 @@ def autoCheckInPointAllotement():
             )
             allotedTask = []
             for index, checkInData in enumerate(checkInResponse):
-                print(checkInData, "cdata")
+              
                 new_task = {
                     "assignedTaskId": str(checkInData.get("_id")),
                     "assignedUser": str(user.get("_id")),

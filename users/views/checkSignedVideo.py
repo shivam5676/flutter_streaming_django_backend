@@ -7,7 +7,7 @@ import os
 
 def checkSignedVideo(url):
     try:
-        return url
+        return url # remove this line when you want to generate a signed url i am just using this return because of some ongoing functionality testing
         url = url
         if not url:
             return
@@ -30,6 +30,6 @@ def checkSignedVideo(url):
         signedUrl = hashlib.md5(conversionStr.encode("utf-8")).hexdigest()
         return f"{url}?t={hex_timestamp}&sign={signedUrl}"
     except Exception as err:
-        print(err)
+       
         return
         # return JsonResponse({"msg": f"{url}?t={hex_timestamp}&sign={signedUrl}"})

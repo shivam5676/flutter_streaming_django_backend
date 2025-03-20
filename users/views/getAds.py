@@ -2,23 +2,24 @@ from django.http import JsonResponse
 from streaming_app_backend.mongo_client import adsCollection
 
 
-def getAds(request, path,sessionType):
+def getAds(request, path, sessionType):
 
     if not path:
         return JsonResponse({"msg": "path is not present"}, status=400)
     pathname = f"/{path.lower()}"
-    sessionType=sessionType
+    sessionType = sessionType
     if request.method == "GET":
         try:
             adsResponse = adsCollection.find(
-                {"position": pathname,"sessionType":sessionType}, {"type": 1, "sessionType": 1, "provider": 1}
+                {"position": pathname, "sessionType": sessionType},
+                {"type": 1, "sessionType": 1, "provider": 1},
             )
-            print(adsResponse)
+
             adsList = []
             if not adsResponse:
                 return JsonResponse({"msg": "no data "})
             for ads in adsResponse:
-                print(ads)
+
                 ads["_id"] = str(ads.get("_id"))
                 adsList.append(ads)
             if not adsList:

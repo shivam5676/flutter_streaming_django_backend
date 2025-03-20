@@ -52,7 +52,6 @@ def genreSelection(request):
             "selectedGenre"
         )  # want an arrays of comma seperated genres id
         userId = request.userId
-        print(selectedGenre)
         if not selectedGenre:
             return JsonResponse({"msg": "could not get mandatory fields "}, status=400)
 

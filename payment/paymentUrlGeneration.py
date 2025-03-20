@@ -25,7 +25,7 @@ def paymentUrlGeneration(request):
 
         try:
             data = json.loads(request.body)
-            print(data)
+            
             txnid = data.get("txnid")  # Unique transaction ID
             amount = data.get("amount")
             email = data.get("email")
@@ -35,10 +35,10 @@ def paymentUrlGeneration(request):
             userId = request.userId
             # ✅ Ensure all required parameters are included
             if not txnid:
-                print(txnid)
+                
                 return JsonResponse({"msg": "invalid txn id"}, status=400)
             if not amount:
-                print(amount)
+                
                 return JsonResponse({"msg": "invalid amount"}, status=400)
             hash_data = {
                 "key": PAYU_KEY,
@@ -68,7 +68,7 @@ def paymentUrlGeneration(request):
                     {"payu_url": PAYU_URL, "params": hash_data}, status=200
                 )
             except Exception as err:
-                print(err)
+              
                 raise ValueError("err while saving transaction data in database")
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
