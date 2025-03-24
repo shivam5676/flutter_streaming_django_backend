@@ -23,7 +23,7 @@ def getLayouts(request):
             for currentMovie in linkedMovies:
                 # print(currentMovie, "currentMovie")
                 movieData = movies_collection.find_one(
-                    {"_id": currentMovie,"visible": True}, {"fileLocation": 1, "name": 1}
+                    {"_id": currentMovie,"visible": True}, {"fileLocation": 1, "name": 1,"screenType":1}
                 )
 
                 if movieData:

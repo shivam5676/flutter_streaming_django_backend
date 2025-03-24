@@ -11,7 +11,7 @@ def verifyPayment(request):
             # Get txnid from request
             # data = json.loads(request.body)
             txnid = request.POST.get("txnid")
-            
+
             if not txnid:
                 return JsonResponse({"msg": "Transaction ID is required"}, status=400)
 

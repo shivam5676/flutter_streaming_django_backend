@@ -7,7 +7,7 @@ from users.views.addPointsToProfile import addPointsToProfile
 
 @csrf_exempt
 def paymentSuccess(request):
-   
+
     PAYU_KEY = "61Cs1H"
     PAYU_SALT = "L1CeWVdYlg8jVhJFxuSnB1TO8UgcjubF"
     txnid = request.POST.get("txnid")
@@ -45,7 +45,7 @@ def paymentSuccess(request):
         )
 
         addPointsToProfile(
-            paidMintsPlan.get("userId"), paidMintsPlan.get("amount"), session
+            paidMintsPlan.get("userId"), paidMintsPlan.get("Quantity"), session
         )
         # for index, data in paidMintsPlan.items():
         #     print(index, "===>", data)
@@ -57,5 +57,5 @@ def paymentSuccess(request):
             status=200,
         )
     except Exception as err:
-        # session.abort_transaction()
+        session.abort_transaction()
         return JsonResponse({"msg": str(err)}, status=400)

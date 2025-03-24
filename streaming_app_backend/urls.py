@@ -25,12 +25,11 @@ from django.urls import path, include, re_path
 from helper_function.autoCheckInPointAllotement import autoCheckInPointAllotement
 
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("videos/", include("videos.urls")),
     path("user/", include("users.urls")),
-    path("payment/",include("payment.urls")),
+    path("payment/", include("payment.urls")),
     path("check/", autoCheckInPointAllotement),
     path("", include("slider.urls")),
     re_path(

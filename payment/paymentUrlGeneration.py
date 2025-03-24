@@ -2,17 +2,24 @@ import hashlib
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from streaming_app_backend.mongo_client import paidMintsBuyerCollection, client
+from streaming_app_backend.mongo_client import (
+    paidMintsBuyerCollection,
+    client,
+    mintsPlanCollection,
+)
 from datetime import datetime
+from bson import ObjectId
+import time
+import random
 
-# ✅ Use Correct Test Credentials
+#  Use Correct Test Credentials
 PAYU_KEY = "61Cs1H"
 PAYU_SALT = "L1CeWVdYlg8jVhJFxuSnB1TO8UgcjubF"
 PAYU_URL = "https://test.payu.in/_payment"
 
 
 def generate_hash(data):
-    """Generate PayU hash using SHA-512 with the correct parameter sequence"""
+    # """Generate PayU hash using SHA-512 with the correct parameter sequence"""
     hash_string = f"{PAYU_KEY}|{data['txnid']}|{data['amount']}|{data['productinfo']}|{data['firstname']}|{data['email']}|||||||||||{PAYU_SALT}"
     return hashlib.sha512(hash_string.encode()).hexdigest()
 
@@ -25,31 +32,36 @@ def paymentUrlGeneration(request):
 
         try:
             data = json.loads(request.body)
-            
-            txnid = data.get("txnid")  # Unique transaction ID
+            packageId = data.get("pid")
+            userId = request.userId
+            # txnid = data.get("txnid")  # Unique transaction ID
+            txnid = f"TXN{int(time.time() * 1000)}{random.randint(1000, 9999)}"
+
             amount = data.get("amount")
             email = data.get("email")
             phone = data.get("phone")
             firstname = data.get("firstname")
             productinfo = data.get("productinfo") or "not provided"
-            userId = request.userId
-            # ✅ Ensure all required parameters are included
+
+            #  Ensure all required parameters are included
             if not txnid:
-                
                 return JsonResponse({"msg": "invalid txn id"}, status=400)
-            if not amount:
-                
-                return JsonResponse({"msg": "invalid amount"}, status=400)
+            # if not amount:
+            #     return JsonResponse({"msg": "invalid amount"}, status=400)
+            mintsDetails = mintsPlanCollection.find_one({"_id": ObjectId(packageId)})
+
+            Price = mintsDetails.get("Price")
             hash_data = {
                 "key": PAYU_KEY,
                 "txnid": txnid,
-                "amount": amount,
+                "amount": mintsDetails.get("Price"),
+                "quantity": mintsDetails.get("Quantity"),
                 "productinfo": productinfo,
                 "firstname": firstname,
                 "email": email,
                 "phone": phone,
                 "surl": "http://192.168.1.62:8000/payment/success/",
-                "furl": "https://192.168.1.62:8000yourdomain.com/payment/error/",
+                "furl": "https://192.168.1.62:8000/payment/error/",
             }
             hash_data["hash"] = generate_hash(hash_data)
             try:
@@ -57,18 +69,17 @@ def paymentUrlGeneration(request):
                     {
                         "userId": userId,
                         "txnid": txnid,
-                        "amount": amount,
+                        "amount": mintsDetails.get("Price"),
                         "date": datetime.now(),
+                        "quantity": mintsDetails.get("Quantity"),
                         "status": "Pending",
-                        "couponApplied": "test100",
-                        
-                    },
+                        # "couponApplied": "test100",
+                    }
                 )
                 return JsonResponse(
                     {"payu_url": PAYU_URL, "params": hash_data}, status=200
                 )
             except Exception as err:
-              
                 raise ValueError("err while saving transaction data in database")
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)

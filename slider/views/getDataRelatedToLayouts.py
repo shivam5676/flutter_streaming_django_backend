@@ -7,7 +7,6 @@ from bson import ObjectId
 @csrf_exempt
 def getDataRelatedToLayOuts(request, layoutID):
 
-  
     # we will get layout id and then we will fetch all the related movies and thier shorts there
     # we also can set limit for that we need to get starting and ending ids means we can decide how much data we have to send per request(optional)
     if request.method == "GET":
@@ -21,7 +20,7 @@ def getDataRelatedToLayOuts(request, layoutID):
                 #   print(currentMovieId)
                 movieData = movies_collection.find_one(
                     {"_id": ObjectId(currentMovieId), "visible": True},
-                    {"fileLocation": 1, "name": 1},
+                    {"fileLocation": 1, "name": 1, "screenType": 1},
                 )
 
                 if movieData:
