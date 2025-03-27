@@ -5,10 +5,10 @@ from bson import ObjectId
 def checkPurchasedVideoData(videoId, userId):
     try:
         videoData = videoPurchasedLogs.find_one(
-            {"shorts_Id": ObjectId(videoId), "user_Id": ObjectId(userId)}
+            {"shorts_Id": str(videoId), "user_Id": str(userId)}
         )
-      
-        
+
+        print(videoData,videoId,userId)
         if videoData:
             return True
 

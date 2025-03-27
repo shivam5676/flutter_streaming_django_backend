@@ -50,6 +50,7 @@ def access_token_authenticator(get_response):
             # You can print or log the decoded token here
           
             request.userId = decodedToken.get("id")
+            
         except jwt.ExpiredSignatureError:
             # Token has expired
             return JsonResponse({"msg": "Token has expired"}, status=400)
