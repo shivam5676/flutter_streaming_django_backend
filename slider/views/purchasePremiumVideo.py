@@ -46,16 +46,18 @@ def purchasePremiumVideo(request):
                 return JsonResponse(
                     {
                         "err": "unable to purchase the shorts... please try again or contact the customer support team "
-                    }
+                    },
+                    status=400,
                 )
-            print(userId)    
+            print(userId)
             user = users_collection.find_one(
                 {"_id": ObjectId(userId)}, {"allocatedPoints": 1}, session=session
             )
             if not user:
                 session.abort_transaction()
                 return JsonResponse(
-                    {"err": "unable to find the user with the given user id "}
+                    {"err": "unable to find the user with the given user id "},
+                    status=400,
                 )
             userWalletPoints = user.get("allocatedPoints") or 0
             if userWalletPoints < videosPointsSpend:
@@ -64,26 +66,29 @@ def purchasePremiumVideo(request):
                     {
                         "msg": "Not enough mints to purchase this video ...please purchase some mints then try to unlock this Paid features"
                     },
+                    status=400,
                 )
             updateAllocationPoints = users_collection.update_one(
                 {"_id": ObjectId(userId)},
                 {"$inc": {"allocatedPoints": -videosPointsSpend}},
                 session=session,
             )
-            print("start",updateAllocationPoints,"up.............",videosPointsSpend)
-            if  updateAllocationPoints.modified_count == 0:
+            print("start", updateAllocationPoints, "up.............", videosPointsSpend)
+            if updateAllocationPoints.modified_count == 0:
                 session.abort_transaction()
                 return JsonResponse(
                     {
                         "err": "problem while updating the allocating points after purchasing the video"
-                    }
+                    },
+                    status=400,
                 )
             session.commit_transaction()
             return JsonResponse(
                 {
                     "medium": checkSignedVideo(shortsData.get("medium")),
                     "high": checkSignedVideo(shortsData.get("high")),
-                }
+                },
+                status=200,
             )
         except Exception as err:
             session.abort_transaction()
