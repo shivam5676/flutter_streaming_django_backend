@@ -16,4 +16,5 @@ def fetchWalletPoints(request):
          return JsonResponse({"msg": "err while fetching the user. please provide a valid token"}, status=400)
         return JsonResponse({"allocatedPoints": userData.get("allocatedPoints")}, status=200)
     else:
+        
         return JsonResponse({"msg": "Method not allowed"}, status=200)
