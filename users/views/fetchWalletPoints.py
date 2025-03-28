@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def fetchWalletPoints(request):
-    if request.method == "POST":
+    if request.method == "GET":
         userId = request.userId
         userData = users_collection.find_one(
             {"_id": ObjectId(userId)}, {"allocatedPoints": 1, "_id": 1}
