@@ -20,16 +20,16 @@ def purchasePremiumVideo(request):
         session = client.start_session()
         session.start_transaction()
         try:
-            print("hello")
+            
             bodyData = json.loads(request.body)
 
             currentShortsID = bodyData.get("shortsID")
-            print("shortsData")
+            
             # verify video is exist or not in database
             shortsData = shorts_collection.find_one(
                 {"_id": ObjectId(currentShortsID)}, session=session
             )
-            print(shortsData)
+            
             if not shortsData:
                 session.abort_transaction()
                 return JsonResponse({"err": "Invalid shorts Id"})
@@ -49,7 +49,7 @@ def purchasePremiumVideo(request):
                     },
                     status=400,
                 )
-            print(userId)
+            
             user = users_collection.find_one(
                 {"_id": ObjectId(userId)}, {"allocatedPoints": 1}, session=session
             )
@@ -73,7 +73,7 @@ def purchasePremiumVideo(request):
                 {"$inc": {"allocatedPoints": -videosPointsSpend}},
                 session=session,
             )
-            print("start", updateAllocationPoints, "up.............", videosPointsSpend)
+            
             if updateAllocationPoints.modified_count == 0:
                 session.abort_transaction()
                 return JsonResponse(

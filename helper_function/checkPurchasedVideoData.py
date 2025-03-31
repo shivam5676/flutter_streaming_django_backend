@@ -8,7 +8,7 @@ def checkPurchasedVideoData(videoId, userId):
             {"shorts_Id": str(videoId), "user_Id": str(userId)}
         )
 
-        print(videoData, videoId, userId)
+       
         if videoData:
             return True
 

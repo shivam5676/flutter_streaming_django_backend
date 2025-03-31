@@ -11,7 +11,7 @@ def fetchWalletPoints(request):
         userData = users_collection.find_one(
             {"_id": ObjectId(userId)}, {"allocatedPoints": 1, "_id": 1}
         )
-        print(userData)
+        
         if not userData:
          return JsonResponse({"msg": "err while fetching the user. please provide a valid token"}, status=400)
         return JsonResponse({"allocatedPoints": userData.get("allocatedPoints")}, status=200)

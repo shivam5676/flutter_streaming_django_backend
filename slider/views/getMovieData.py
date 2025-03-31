@@ -6,6 +6,7 @@ from streaming_app_backend.mongo_client import (
     shorts_collection,
     users_collection,
     videoPurchasedLogs,
+    userReactionLogs,
 )
 import json
 from bson import ObjectId
@@ -71,7 +72,17 @@ def getMovieData(request):
                                 purchased = checkPurchasedVideoData(
                                     currentShortsID, userId
                                 )
-                                print(purchased,currentShortsID)
+                                print(currentShortsID, userId)
+                                shortsReaction = userReactionLogs.find_one(
+                                    {
+                                        "shortsId": currentShortsID,
+                                        "userId": ObjectId(userId),
+                                    },
+                                    {
+                                        "reaction": 1,
+                                    },
+                                )
+                                print(shortsReaction)
                                 # Convert ObjectId fields to strings in shortsData
                                 shortsData["_id"] = str(shortsData["_id"])
                                 shortsData["low"] = checkSignedVideo(
@@ -87,30 +98,18 @@ def getMovieData(request):
                                     and checkSignedVideo(shortsData.get("high"))
                                     or "Not Purchased"
                                 )
+                                shortsData["reaction"] = (
+                                    shortsReaction.get("reaction")
+                                    if shortsReaction
+                                    else "none"
+                                )
                                 shorts.append(shortsData)
-                            # Add more fields to convert if needed
-                            # shorts.append(shortsData)
-                            # videoPurchasedLogs.insert_one(
-                            #     {
-                            #         "shorts_Id": currentShortsID,
-                            #         "user_Id": ObjectId(userId),
-                            #     }
-                            # )
-                    #         else:
-                    #             shorts.append(
-                    #                 {
-                    #                     "_id": "Insufficient Point",  # this hardcoded data is very necesaary to display the ui in frontend so if u changes it here then changes it in frontend too
-                    #                     "low": "Insufficient Point",
-                    #                     "medium": "Insufficient Point",
-                    #                     "high": "Insufficient Point",
-                    #                 }
-                    #             )
-                    # users_collection.update_one(
-                    #     {"_id": ObjectId(userId)},
-                    #     {"$inc": {"allocatedPoints": -videosPointsSpend}},
-                    # )  # we are saving the latest deduction point after getting all the urls
+
             return JsonResponse({"shortsData": shorts}, status=200)
         except Exception as err:
-            print(err, "err")
+
+            return JsonResponse(
+                {"msg": "something went wrong", err: str(err)}, status=400
+            )
     # moviesData = movies_collection.find_one({_id: request.params.id})
     return JsonResponse({"msg": "method not allowed"}, status=500)

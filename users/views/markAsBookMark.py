@@ -46,13 +46,13 @@ def markAsBookMark(request):
         body = json.loads(request.body)
         userId = request.userId
         shortsId = body.get("shortsId")
-        
+
         if not shortsId:
             return JsonResponse({"msg": "Important field is missing"}, status=400)
-        
+
         if not ObjectId.is_valid(shortsId):
             return JsonResponse({"msg": "Shorts ID is not valid"}, status=400)
-        
+
         try:
             user = users_collection.find_one({"_id": ObjectId(userId)})
             if not user:
@@ -75,4 +75,3 @@ def markAsBookMark(request):
             return JsonResponse({"msg": str(err)}, status=400)
     else:
         return JsonResponse({"msg": "Method not allowed"}, status=405)
-

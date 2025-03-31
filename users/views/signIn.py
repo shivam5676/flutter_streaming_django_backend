@@ -78,7 +78,7 @@ def signIn(request):
                     return JsonResponse(
                         {
                             "msg": "The password you Entered not matched with stored password"
-                        }
+                        },status=401
                     )
                 del userResponse["password"]
                 updatedUserResponse, token = updateLoginStatus(
@@ -93,7 +93,7 @@ def signIn(request):
                     status=200,
                 )
             except Exception as err:
-                print(err)
+              
                 return JsonResponse({"msg": str(err)}, status=400)
 
     else:

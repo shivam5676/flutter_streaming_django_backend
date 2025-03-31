@@ -14,7 +14,7 @@ from helper_function.emailSender import emailSender
 @csrf_exempt
 def googleAuth(request):
     if request.method == "POST":
-        
+
         try:
             body = json.loads(request.body)
         except json.JSONDecodeError:
@@ -24,7 +24,6 @@ def googleAuth(request):
 
         authToken = body.get("authToken")
 
-        
         try:
 
             CLIENT_ID = "483555861541-om8qaihdq8cl9bosvpqpus45q22e65a0.apps.googleusercontent.com"
@@ -61,7 +60,7 @@ def googleAuth(request):
                         }
                     )
                 else:
-                    
+
                     password = "hexagonal"
                     saveUserInDataBase(
                         {"name": name, "email": email, "password": password}
@@ -75,7 +74,7 @@ def googleAuth(request):
                             getSavedUser, fcmtoken, deviceType
                         )
                         # token = tokenCreator({"id": str(getSavedUser.get("_id"))})
-                        emailSender({"name":name,"email": email, "type": "direct"})
+                        emailSender({"name": name, "email": email, "type": "direct"})
                         return JsonResponse(
                             {
                                 "msg": "google authentication done......registered a new account",

@@ -11,6 +11,6 @@ def tokenCreator(data):
         return token
 
     except Exception as e:
-        print("error in token generation", e)
+       
         raise ValueError(str("error in token generation"))
     #    return JsonResponse({"msg":"something went wrong"})
