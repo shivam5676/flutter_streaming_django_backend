@@ -28,7 +28,7 @@ def addPointsToProfile(userId, allotedPoints, session):
 
             # return {"success": False, "error": "Failed to update points."}
     except Exception as e:
-        if session:
-            session.abort_transaction()
+        # if session:
+        #     session.abort_transaction()
 
         raise ValueError(str(e))

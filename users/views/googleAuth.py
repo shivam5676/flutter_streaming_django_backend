@@ -9,6 +9,7 @@ from helper_function.updateLoginStatus import updateLoginStatus
 import json
 from django.views.decorators.csrf import csrf_exempt
 from helper_function.emailSender import emailSender
+import os
 
 
 @csrf_exempt
@@ -26,7 +27,7 @@ def googleAuth(request):
 
         try:
 
-            CLIENT_ID = "483555861541-om8qaihdq8cl9bosvpqpus45q22e65a0.apps.googleusercontent.com"
+            CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
             # CLIENT_ID = "711384080035-g77aj9ec6d0cnqpns28k6jttd16g1g6u.apps.googleusercontent.com"
             idinfo = id_token.verify_oauth2_token(
                 authToken, requests.Request(), CLIENT_ID
@@ -68,7 +69,7 @@ def googleAuth(request):
                     getSavedUser = users_collection.find_one(
                         {"email": email}, {"password": 0}
                     )
-
+                    print("get",getSavedUser)
                     if getSavedUser:
                         updatedUserResponse, token = updateLoginStatus(
                             getSavedUser, fcmtoken, deviceType

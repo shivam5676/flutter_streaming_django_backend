@@ -1,13 +1,14 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from streaming_app_backend.mongo_client import paidMintsBuyerCollection
+import os
 
 
 @csrf_exempt
 def paymentError(request):
 
-    PAYU_KEY = "61Cs1H"
-    PAYU_SALT = "L1CeWVdYlg8jVhJFxuSnB1TO8UgcjubF"
+    PAYU_KEY = os.getenv("PAYU_KEY")
+    PAYU_SALT = os.getenv("PAYU_SALT")
     txnid = request.POST.get("txnid")
     headers = {"key": PAYU_KEY, "command": "verify_payment"}
     mihpayid = request.POST.get("mihpayid") or ""
@@ -24,7 +25,7 @@ def paymentError(request):
         # reqData = requests.post("https://test.payu.in/merchant/postservice.php?form=2")
         # print(reqData)
         paidMintsPlan = paidMintsBuyerCollection.find_one_and_update(
-            {"txnid": txnid},
+            {"txnid": str(txnid)},
             {
                 "$set": {
                     "status": "Failed",

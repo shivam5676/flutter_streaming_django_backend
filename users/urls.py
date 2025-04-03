@@ -20,6 +20,8 @@ from .views.checkSignedVideo import checkSignedVideo
 from .views.googleAuth import googleAuth
 from .views.getPackage import getPackage
 from .views.fetchWalletPoints import fetchWalletPoints
+from .views.forgotPassword import forgotPassword
+
 urlpatterns = [
     path("register/", createUser),
     path("signIn/", signIn),
@@ -41,5 +43,6 @@ urlpatterns = [
     path("checkSignedVideo/", checkSignedVideo),
     path("getPackage/", getPackage),
     path("googleAuth/", googleAuth),
-    path("fetchWallet/",fetchWalletPoints ),
+    path("fetchWallet/", fetchWalletPoints),
+    path("forgotPassword", forgotPassword),
 ]

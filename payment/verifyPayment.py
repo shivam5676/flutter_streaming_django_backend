@@ -2,6 +2,8 @@ import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import os
+from dotenv import load_dotenv
 
 
 @csrf_exempt
@@ -16,8 +18,8 @@ def verifyPayment(request):
                 return JsonResponse({"msg": "Transaction ID is required"}, status=400)
 
             # PayU Merchant Credentials
-            PAYU_KEY = "61Cs1H"
-            PAYU_SALT = "L1CeWVdYlg8jVhJFxuSnB1TO8UgcjubF"
+            PAYU_KEY = os.getenv("PAYU_KEY")
+            PAYU_SALT = os.getenv("PAYU_SALT")
 
             # API Endpoint for Payment Verification (Use Live URL in Production)
             PAYU_VERIFY_URL = "https://test.payu.in/merchant/postservice?form=2"
@@ -46,6 +48,7 @@ def verifyPayment(request):
 
             # Check response status
             if response_data.get("status") == 1:
+
                 return JsonResponse(
                     {"msg": "Payment verified", "data": response_data},
                     status=200,

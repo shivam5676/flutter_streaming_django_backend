@@ -2,6 +2,8 @@
 import jwt
 import json
 from django.http import JsonResponse
+import os
+from dotenv import load_dotenv
 
 
 def access_token_authenticator(get_response):
@@ -39,18 +41,20 @@ def access_token_authenticator(get_response):
         #         print(err)
 
         token = request.headers.get("token")
-        print(token, "toku")
+
         if not token:
 
             return JsonResponse({"msg": "token not present"}, status=400)
         try:
-
+            # print(os.getenv("sugarValue"),"lllodkshdhs")
             # Attempt to decode the token using the secret and algorithm
-            decodedToken = jwt.decode(token, "shivamssr", algorithms=["HS256"])
+            decodedToken = jwt.decode(
+                token, os.getenv("sugarValue"), algorithms=["HS256"]
+            )
             # You can print or log the decoded token here
-          
+
             request.userId = decodedToken.get("id")
-            
+
         except jwt.ExpiredSignatureError:
             # Token has expired
             return JsonResponse({"msg": "Token has expired"}, status=400)

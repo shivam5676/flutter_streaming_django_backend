@@ -36,7 +36,8 @@ def saveUserInDataBase(data):
                 "createdAt": current_time,  # created_at field
                 "updatedAt": current_time,  # updated_at field
                 # "next_Allocation": next_allocation,
-            }
+            },
+            session=data.get("session"),
         )
         user_id = userResponse.inserted_id
 
@@ -47,7 +48,7 @@ def saveUserInDataBase(data):
 
             allotedTask = []
             for index, checkInData in enumerate(checkInResponse):
-               
+
                 new_task = {
                     "assignedTaskId": str(checkInData.get("_id")),
                     "assignedUser": str(user_id),
@@ -60,7 +61,7 @@ def saveUserInDataBase(data):
 
             if allotedTask:
                 dailyAllocationResponse = dailyCheckInTask_collection.insert_many(
-                    allotedTask
+                    allotedTask, session=data.get("session")
                 )
                 if dailyAllocationResponse:
                     users_collection.find_one_and_update(
@@ -71,14 +72,15 @@ def saveUserInDataBase(data):
                                 "next_Allocation": next_allocation,
                             }
                         },
+                        session=data.get("session"),
                     )
 
                 return userResponse
 
         else:
-          
+
             raise ValueError(" something went wrong while creating user")
 
     except Exception as err:
-        print(err)
+
         raise ValueError((err))

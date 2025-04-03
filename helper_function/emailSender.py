@@ -52,4 +52,5 @@ def emailSender(data):
         email.send()
         return "email sent successfully"
     except Exception as err:
-        raise ValueError(str(err))
+        print(err, "err")
+        # raise ValueError(str(err))

@@ -22,3 +22,4 @@ paidMintsBuyerCollection = db.paidMintsBuyer
 mintsPlanCollection = db.mintsplans
 videoPurchasedLogs = db.videoPurchasedLogs
 userReactionLogs = db.userReactionLogs
+forgotPasswordRequests = db.forgotPasswordRequests

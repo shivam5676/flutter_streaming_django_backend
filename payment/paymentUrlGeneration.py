@@ -11,10 +11,11 @@ from datetime import datetime
 from bson import ObjectId
 import time
 import random
-
+import os
+from dotenv import load_dotenv
 #  Use Correct Test Credentials
-PAYU_KEY = "61Cs1H"
-PAYU_SALT = "L1CeWVdYlg8jVhJFxuSnB1TO8UgcjubF"
+PAYU_KEY = os.getenv("PAYU_KEY")
+PAYU_SALT = os.getenv("PAYU_SALT")
 PAYU_URL = "https://test.payu.in/_payment"
 
 
@@ -60,11 +61,13 @@ def paymentUrlGeneration(request):
                 "firstname": firstname,
                 "email": email,
                 "phone": phone,
-                "surl": "http://192.168.1.62:8000/payment/success/",
-                "furl": "https://192.168.1.62:8000/payment/error/",
+                "surl": "http://192.168.1.14:8000/payment/success/",
+                "furl": "http://192.168.1.14:8000/payment/error/",
             }
             hash_data["hash"] = generate_hash(hash_data)
             try:
+                
+                
                 paidMintsBuyerCollection.insert_one(
                     {
                         "userId": userId,

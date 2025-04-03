@@ -40,7 +40,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     "corsheaders",
     "drf_yasg",
-    'django_celery_beat',
+    "django_celery_beat",
     # "helper_function",
     "videos",
     "slider",
@@ -67,13 +67,11 @@ MIDDLEWARE = [
     "middleware.tokenAuthentication.access_token_authenticator",  # middleware custom i created
 ]
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_HEADERS=[
-    "token","content-type"
-]
+CORS_ALLOW_HEADERS = ["token", "content-type"]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",  # Frontend origin
     "http://192.168.1.64:8000",  # Backend origin if required
-    "http://127.0.0.1:3000"
+    "http://127.0.0.1:3000",
 ]
 ROOT_URLCONF = "streaming_app_backend.urls"
 
@@ -155,19 +153,19 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 APPEND_SLASH = True
 # Celery Configuration
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = MONGODB_URI + "/celery_results"
 
 # Timezone settings
 CELERY_TIMEZONE = "UTC"
 
 
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'appteam@omr.co.in'  # Replace with your Gmail
-EMAIL_HOST_PASSWORD = 'pdqz ldyq dqjo gxid'  # Replace with App Password (not your Gmail password)
+EMAIL_HOST_USER = "appteam@omr.co.in"  # Replace with your Gmail
+EMAIL_HOST_PASSWORD = (
+    "wqjb ngar vafy pqsn"  # Replace with App Password (not your Gmail password)
+)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

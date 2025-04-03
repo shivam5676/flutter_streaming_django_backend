@@ -3,59 +3,60 @@ from django.views.decorators.csrf import csrf_exempt
 import requests
 from streaming_app_backend.mongo_client import paidMintsBuyerCollection, client
 from users.views.addPointsToProfile import addPointsToProfile
+import os
 
 
 @csrf_exempt
 def paymentSuccess(request):
+    if request.method == "POST":
+        PAYU_KEY = os.getenv("PAYU_KEY")
+        PAYU_SALT = os.getenv("PAYU_SALT")
+        txnid = request.POST.get("txnid")
+        headers = {"key": PAYU_KEY, "command": "verify_payment"}
+        mihpayid = request.POST.get("mihpayid") or ""
+        bank_ref_num = request.POST.get("bank_ref_num") or ""
 
-    PAYU_KEY = "61Cs1H"
-    PAYU_SALT = "L1CeWVdYlg8jVhJFxuSnB1TO8UgcjubF"
-    txnid = request.POST.get("txnid")
-    headers = {"key": PAYU_KEY, "command": "verify_payment"}
-    mihpayid = request.POST.get("mihpayid") or ""
-    bank_ref_num = request.POST.get("bank_ref_num") or ""
+        paymentMode = request.POST.get("mode") or ""
 
-    paymentMode = request.POST.get("mode") or ""
+        netAmountDeducted = request.POST.get("net_amount_debit") or ""
+        paymentGateway = request.POST.get("PG_TYPE") or ""
+        paymentAggregator = request.POST.get("pa_name") or ""
 
-    netAmountDeducted = request.POST.get("net_amount_debit") or ""
-    paymentGateway = request.POST.get("PG_TYPE") or ""
-    paymentAggregator = request.POST.get("pa_name") or ""
+        try:
+            session = client.start_session()
+            session.start_transaction()
+            # reqData = requests.post("https://test.payu.in/merchant/postservice.php?form=2")
+            # print(reqData)
+            paidMintsPlan = paidMintsBuyerCollection.find_one_and_update(
+                {"txnid": str(txnid)},
+                {
+                    "$set": {
+                        "status": "Success",
+                        "mihpayid": mihpayid,
+                        "Deductable_Amount": netAmountDeducted,
+                        "paymentSource": "Payu",
+                        "paymentMode": paymentMode,
+                        "bank_ref_num": bank_ref_num,
+                        "netAmountDeducted": netAmountDeducted,
+                        "paymentGateway": paymentGateway,
+                        "paymentAggregator": paymentAggregator,
+                    }
+                },
+                session=session,
+            )
+            print(paidMintsPlan,"djlhgvfhlfsvbhjfschvbjksfhvbjkfhb",paidMintsPlan.get("quantity"))
+            addPointsToProfile(
+                paidMintsPlan.get("userId"), paidMintsPlan.get("quantity"), session
+            )
 
-    try:
-        session = client.start_session()
-        session.start_transaction()
-        # reqData = requests.post("https://test.payu.in/merchant/postservice.php?form=2")
-        # print(reqData)
-        paidMintsPlan = paidMintsBuyerCollection.find_one_and_update(
-            {"txnid": txnid},
-            {
-                "$set": {
-                    "status": "Success",
-                    "mihpayid": mihpayid,
-                    "Deductable_Amount": netAmountDeducted,
-                    "paymentSource": "Payu",
-                    "paymentMode": paymentMode,
-                    "bank_ref_num": bank_ref_num,
-                    "netAmountDeducted": netAmountDeducted,
-                    "paymentGateway": paymentGateway,
-                    "paymentAggregator": paymentAggregator,
-                }
-            },
-            session=session,
-        )
-
-        addPointsToProfile(
-            paidMintsPlan.get("userId"), paidMintsPlan.get("Quantity"), session
-        )
-        # for index, data in paidMintsPlan.items():
-        #     print(index, "===>", data)
-        session.commit_transaction()
-        return JsonResponse(
-            {
-                "msg": "payment success",
-            },
-            status=200,
-        )
-    except Exception as err:
-        session.abort_transaction()
-        return JsonResponse({"msg": str(err)}, status=400)
+            session.commit_transaction()
+            return JsonResponse(
+                {
+                    "msg": "payment success",
+                },
+                status=200,
+            )
+        except Exception as err:
+            print(err)
+            session.abort_transaction()
+            return JsonResponse({"msg": str(err)}, status=400)

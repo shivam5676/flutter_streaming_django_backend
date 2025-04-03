@@ -73,12 +73,13 @@ def signIn(request):
             try:
                 storedPAssword = userResponse.get("password")
                 password_match = verifyPassword(password, storedPAssword)
-                
+
                 if not password_match:
                     return JsonResponse(
                         {
                             "msg": "The password you Entered not matched with stored password"
-                        },status=401
+                        },
+                        status=401,
                     )
                 del userResponse["password"]
                 updatedUserResponse, token = updateLoginStatus(
@@ -93,7 +94,7 @@ def signIn(request):
                     status=200,
                 )
             except Exception as err:
-              
+
                 return JsonResponse({"msg": str(err)}, status=400)
 
     else:

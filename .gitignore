@@ -66,3 +66,4 @@ Pipfile.lock
 
 # Docker
 docker-compose.override.yml
+.env
