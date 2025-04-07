@@ -13,6 +13,8 @@ def access_token_authenticator(get_response):
         # print("Inside the middleware",jwt.decode("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2M1NDA2NzcwMTRjMTMzNDlhMzdhNCJ9.wo_uoHy_WB3ZLPZNr9dCuEZ_CAbYvYviRKSVdBafVk0","shivamssr", algorithms=["HS256"]))
         # Process request here, for example, token authentication
         excluded_paths = [
+            "/user/verifyOtp/",
+            "/user/forgotPassword/",
             "/check/",
             "/payment/success/",
             "/payment/error/",
@@ -52,8 +54,9 @@ def access_token_authenticator(get_response):
                 token, os.getenv("sugarValue"), algorithms=["HS256"]
             )
             # You can print or log the decoded token here
-
+            print(decodedToken, "dec")
             request.userId = decodedToken.get("id")
+            request.otpId = decodedToken.get("otpId")
 
         except jwt.ExpiredSignatureError:
             # Token has expired

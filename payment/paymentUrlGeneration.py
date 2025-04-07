@@ -38,7 +38,7 @@ def paymentUrlGeneration(request):
             # txnid = data.get("txnid")  # Unique transaction ID
             txnid = f"TXN{int(time.time() * 1000)}{random.randint(1000, 9999)}"
 
-            amount = data.get("amount")
+            
             email = data.get("email")
             phone = data.get("phone")
             firstname = data.get("firstname")

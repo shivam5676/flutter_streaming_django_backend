@@ -78,7 +78,7 @@ def updateLoginStatus(userResponse, fcmtoken, deviceType):
                     userDevices.append(
                         {
                             "fcmtoken": fcmtoken,
-                            "deviceType": deviceType,
+                            "deviceType": deviceType  or "web",
                             "lastUpdated": datetime.now(timezone.utc),
                         }
                     )
@@ -90,7 +90,7 @@ def updateLoginStatus(userResponse, fcmtoken, deviceType):
             userResponse["Devices"] = [
                 {
                     "fcmtoken": fcmtoken,
-                    "deviceType": deviceType,
+                    "deviceType": deviceType  or "web",
                     "lastUpdated": datetime.now(timezone.utc),
                 }
             ]

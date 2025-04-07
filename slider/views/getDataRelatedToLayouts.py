@@ -12,7 +12,9 @@ def getDataRelatedToLayOuts(request, layoutID):
     if request.method == "GET":
         result = layouts_collection.find({"_id": ObjectId(layoutID), "visible": True})
         movieObj = []
+
         for layout in result:
+
             # print(layout)
             linkedMovies = layout["linkedMovies"]
 

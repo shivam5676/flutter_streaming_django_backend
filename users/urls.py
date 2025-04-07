@@ -21,6 +21,8 @@ from .views.googleAuth import googleAuth
 from .views.getPackage import getPackage
 from .views.fetchWalletPoints import fetchWalletPoints
 from .views.forgotPassword import forgotPassword
+from .views.verifyOtp import verifyOtp
+from .views.updatePassword import updatePassword
 
 urlpatterns = [
     path("register/", createUser),
@@ -44,5 +46,7 @@ urlpatterns = [
     path("getPackage/", getPackage),
     path("googleAuth/", googleAuth),
     path("fetchWallet/", fetchWalletPoints),
-    path("forgotPassword", forgotPassword),
+    path("forgotPassword/", forgotPassword),
+    path("verifyOtp/", verifyOtp),
+    path("updatePassword/", updatePassword),
 ]

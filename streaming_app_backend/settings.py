@@ -165,7 +165,7 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "appteam@omr.co.in"  # Replace with your Gmail
-EMAIL_HOST_PASSWORD = (
-    "wqjb ngar vafy pqsn"  # Replace with App Password (not your Gmail password)
-)
+EMAIL_HOST_PASSWORD = "wdko fhay nbws pwkr" #gmail app passwords not gmail signin password
+
+
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
