@@ -20,10 +20,11 @@ def verifyOtp(request):
                 "isUsed": False,
                 "otp": int(otp),
                 "createdTime": {"$gte": fifteen_min_ago},
+                
             },
             {
                 "$set": {
-                    "isUsed": True,
+                    "isUsed": True,"status": "Pending",
                 }
             },
             projection={"_id": True, "userId": True},
