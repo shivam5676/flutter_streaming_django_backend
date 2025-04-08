@@ -53,8 +53,7 @@ def access_token_authenticator(get_response):
             decodedToken = jwt.decode(
                 token, os.getenv("sugarValue"), algorithms=["HS256"]
             )
-            # You can print or log the decoded token here
-            print(decodedToken, "dec")
+          
             request.userId = decodedToken.get("id")
             request.otpId = decodedToken.get("otpId")
 

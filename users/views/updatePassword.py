@@ -42,14 +42,14 @@ def updatePassword(request):
                     "userId": ObjectId(userId),
                     "createdTime": {"$gte": fifteen_min_ago},
                 },
-                {"userId": 1,"status":1},
+                {"userId": 1, "status": 1},
             )
             print(existing_Requests, "eyeydgefdehgfchdgfchedgtycfk")
 
             if not existing_Requests:
                 return JsonResponse(
                     {"msg": "No request found for changing otp in previous 15 minutes"},
-                    status=400
+                    status=400,
                 )
             if existing_Requests["status"] == "Success":
                 return JsonResponse(
@@ -75,7 +75,7 @@ def updatePassword(request):
             )
             return JsonResponse({"msg": "Password Changed Successfully"}, status=200)
         except Exception as err:
-            
+
             return JsonResponse({"msg": f"{err}"}, status=400)
     else:
         return JsonResponse({"msg": " method not allowed"}, status=400)

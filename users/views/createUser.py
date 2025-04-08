@@ -68,11 +68,12 @@ def createUser(request):
                     {"msg": "user is already registered with us with this email"},
                     status=400,
                 )
-           
+
             userCreated = saveUserInDataBase(
                 {"name": name, "email": email, "password": password, "session": session}
             )
             emailSender({"name": name, "email": email})
+            session.commit_transaction()
             return JsonResponse(
                 {"msg": "added user successfully", "success": True}, status=200
             )
