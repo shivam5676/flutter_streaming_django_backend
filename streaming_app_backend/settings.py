@@ -72,7 +72,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",  # Frontend origin
     "http://192.168.1.64:8000",  # Backend origin if required
     "http://127.0.0.1:3000",
-    "http://3.110.39.32:8000"
+    "http://3.110.39.32:8000",
 ]
 ROOT_URLCONF = "streaming_app_backend.urls"
 
@@ -95,25 +95,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "streaming_app_backend.wsgi.application"
 
-from mongoengine import connect
 
-MONGODB_URI = "mongodb+srv://shivam:1234Shivam@cluster0.ugn8rkz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+MONGODB_URI = os.getenv("MONGODB_URI")
 
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": "flutterBackend",
-#         "USER": "root",
-#         "PASSWORD": "1234",
-#         "HOST": "localhost",  # Set to 'localhost' if using local MySQL
-#         "PORT": "3306",  # Default MySQL port
-#     }
-# }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -154,7 +138,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 APPEND_SLASH = True
 # Celery Configuration
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = MONGODB_URI + "/celery_results"
 
 # Timezone settings
@@ -163,10 +147,12 @@ CELERY_TIMEZONE = "UTC"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "appteam@omr.co.in"  # Replace with your Gmail
-EMAIL_HOST_PASSWORD = "wdko fhay nbws pwkr" #gmail app passwords not gmail signin password
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # Replace with your Gmail
+EMAIL_HOST_PASSWORD = os.getenv(
+    "EMAIL_HOST_PASSWORD"
+)  # gmail app passwords not gmail signin password
 
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

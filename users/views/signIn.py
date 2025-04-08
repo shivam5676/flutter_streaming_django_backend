@@ -72,7 +72,7 @@ def signIn(request):
         else:
             try:
                 storedPAssword = userResponse.get("password")
-                print(storedPAssword)
+                
                 password_match = verifyPassword(password, storedPAssword)
 
                 if not password_match:

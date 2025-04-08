@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 #  Use Correct Test Credentials
 PAYU_KEY = os.getenv("PAYU_KEY")
 PAYU_SALT = os.getenv("PAYU_SALT")
-PAYU_URL = "https://test.payu.in/_payment"
+PAYU_URL = os.getenv("PAYU_URL")
 
 
 def generate_hash(data):

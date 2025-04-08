@@ -9,7 +9,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 @swagger_auto_schema(
-    method="POST",
+    method="GET",
     operation_description="This API allows the user to fetch wallet points. The request should contain the user token in headers ",
     manual_parameters=[
         openapi.Parameter(
@@ -29,7 +29,8 @@ from drf_yasg.utils import swagger_auto_schema
     },
     tags=["User"],
 )
-@api_view(["POST"])
+@api_view(["GET"])
+
 @csrf_exempt
 def fetchWalletPoints(request):
     if request.method == "GET":
@@ -47,5 +48,4 @@ def fetchWalletPoints(request):
             {"allocatedPoints": userData.get("allocatedPoints")}, status=200
         )
     else:
-
         return JsonResponse({"msg": "Method not allowed"}, status=200)

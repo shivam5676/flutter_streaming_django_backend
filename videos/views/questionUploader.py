@@ -9,13 +9,13 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 def questionUploader(request):
-    print("req is coming")
+    
     if request.method == "POST":
         saved_files = []
         edu_videos = request.FILES.getlist(
             "eduVideos"
         )  # Use getlist to get multiple files
-        print(edu_videos)
+        
 
         # Define the storage location for the uploaded videos
         videos_directory = os.path.join(settings.MEDIA_ROOT, "education", "video")

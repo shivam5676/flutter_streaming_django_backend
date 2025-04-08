@@ -72,7 +72,7 @@ def getMovieData(request):
                                 purchased = checkPurchasedVideoData(
                                     currentShortsID, userId
                                 )
-                                print(currentShortsID, userId)
+                                
                                 shortsReaction = userReactionLogs.find_one(
                                     {
                                         "shortsId": currentShortsID,
@@ -82,7 +82,7 @@ def getMovieData(request):
                                         "reaction": 1,
                                     },
                                 )
-                                print(shortsReaction)
+                                
                                 # Convert ObjectId fields to strings in shortsData
                                 shortsData["_id"] = str(shortsData["_id"])
                                 shortsData["low"] = checkSignedVideo(

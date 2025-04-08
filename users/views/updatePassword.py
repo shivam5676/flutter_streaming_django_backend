@@ -44,7 +44,7 @@ def updatePassword(request):
                 },
                 {"userId": 1, "status": 1},
             )
-            print(existing_Requests, "eyeydgefdehgfchdgfchedgtycfk")
+            
 
             if not existing_Requests:
                 return JsonResponse(

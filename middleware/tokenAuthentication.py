@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 def access_token_authenticator(get_response):
     # This is the actual middleware function
     def accesstokenAuthMiddleware(request):
-        print("request", request.headers)
+
         # print("Inside the middleware",jwt.decode("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2M1NDA2NzcwMTRjMTMzNDlhMzdhNCJ9.wo_uoHy_WB3ZLPZNr9dCuEZ_CAbYvYviRKSVdBafVk0","shivamssr", algorithms=["HS256"]))
         # Process request here, for example, token authentication
         excluded_paths = [
@@ -53,7 +53,7 @@ def access_token_authenticator(get_response):
             decodedToken = jwt.decode(
                 token, os.getenv("sugarValue"), algorithms=["HS256"]
             )
-          
+
             request.userId = decodedToken.get("id")
             request.otpId = decodedToken.get("otpId")
 

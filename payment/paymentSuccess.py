@@ -9,10 +9,10 @@ import os
 @csrf_exempt
 def paymentSuccess(request):
     if request.method == "POST":
-        PAYU_KEY = os.getenv("PAYU_KEY")
-        PAYU_SALT = os.getenv("PAYU_SALT")
+        
+
         txnid = request.POST.get("txnid")
-        headers = {"key": PAYU_KEY, "command": "verify_payment"}
+
         mihpayid = request.POST.get("mihpayid") or ""
         bank_ref_num = request.POST.get("bank_ref_num") or ""
 
@@ -25,8 +25,7 @@ def paymentSuccess(request):
         try:
             session = client.start_session()
             session.start_transaction()
-            # reqData = requests.post("https://test.payu.in/merchant/postservice.php?form=2")
-            # print(reqData)
+           
             paidMintsPlan = paidMintsBuyerCollection.find_one_and_update(
                 {"txnid": str(txnid)},
                 {
@@ -44,7 +43,7 @@ def paymentSuccess(request):
                 },
                 session=session,
             )
-            print(paidMintsPlan,"djlhgvfhlfsvbhjfschvbjksfhvbjkfhb",paidMintsPlan.get("quantity"))
+
             addPointsToProfile(
                 paidMintsPlan.get("userId"), paidMintsPlan.get("quantity"), session
             )

@@ -38,7 +38,6 @@ def convert_video_to_audio(video_name):
     return f"{base_name}.wav"
 
 
-
 def convert_audio_to_text(audio_file_path, output_file_path):
     # Initialize recognizer class (for recognizing the speech)
     if not os.path.exists(audio_file_path):
@@ -61,7 +60,7 @@ def convert_audio_to_text(audio_file_path, output_file_path):
                 file.write(text)
 
             return text
-        
+
         except sr.UnknownValueError:
             print("Google Speech Recognition could not understand the audio")
         except sr.RequestError:
@@ -86,12 +85,11 @@ def generate_response(request):
             "..",
             "media",
             "education",
-          
             "videoAudio",
             audio_name,
         )
     )
-    print(audio_path, "auuuusdhkshfrh")
+
     # Convert audio to text and save it
     fileTextPAth = os.path.join(settings.MEDIA_ROOT, "education", "videoText")
     outpuData = convert_audio_to_text(audio_path, f"{audio_path}.txt")

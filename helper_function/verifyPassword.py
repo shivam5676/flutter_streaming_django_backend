@@ -6,7 +6,7 @@ def verifyPassword(password, hashedPassword):
         is_Verified = bcrypt.checkpw(
             password.encode("utf-8"), hashedPassword.encode("utf-8")
         )
-        print(is_Verified,"tygwrhthtejhntegw")
+
         if not is_Verified:
             raise ValueError("incorrect password")
         return is_Verified
