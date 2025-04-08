@@ -30,9 +30,14 @@ from drf_yasg.utils import swagger_auto_schema
 def TrailerTrendingSection(request):
     if request.method == "GET":
 
-        moviesData = movies_collection.find(
-            {}, {"_id": 1, "name": 1, "shorts": 1, "trailerUrl": 1, "fileLocation": 1}
-        ).limit(10)
+        moviesData = (
+            movies_collection.find(
+                {},
+                {"_id": 1, "name": 1, "shorts": 1, "trailerUrl": 1, "fileLocation": 1},
+            )
+            .sort("views", -1)
+            .limit(10)
+        )
         moviesArray = []
         for movie in moviesData:
 
@@ -51,6 +56,6 @@ def TrailerTrendingSection(request):
 
             movie["shorts"] = shortsArray
             moviesArray.append(movie)
-        return JsonResponse({"trailersData": moviesArray},status=200)
+        return JsonResponse({"trailersData": moviesArray}, status=200)
     else:
-        return JsonResponse({"msg": "method not allowed"},status=500)
+        return JsonResponse({"msg": "method not allowed"}, status=500)

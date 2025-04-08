@@ -21,7 +21,7 @@ from drf_yasg.utils import swagger_auto_schema
         )
     ],
     responses={
-        200: openapi.Response(description="trending shorts fetched successfully"),
+        200: openapi.Response(description="profile data  fetched successfully"),
         400: openapi.Response(description="Invalid request or token missing"),
         401: openapi.Response(description="Unauthorized - Invalid or missing token"),
         500: openapi.Response(description="method not allowed"),
