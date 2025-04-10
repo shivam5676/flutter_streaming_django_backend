@@ -13,6 +13,7 @@ import time
 import random
 import os
 from dotenv import load_dotenv
+
 #  Use Correct Test Credentials
 PAYU_KEY = os.getenv("PAYU_KEY")
 PAYU_SALT = os.getenv("PAYU_SALT")
@@ -38,7 +39,6 @@ def paymentUrlGeneration(request):
             # txnid = data.get("txnid")  # Unique transaction ID
             txnid = f"TXN{int(time.time() * 1000)}{random.randint(1000, 9999)}"
 
-            
             email = data.get("email")
             phone = data.get("phone")
             firstname = data.get("firstname")
@@ -52,6 +52,7 @@ def paymentUrlGeneration(request):
             mintsDetails = mintsPlanCollection.find_one({"_id": ObjectId(packageId)})
 
             Price = mintsDetails.get("Price")
+            backendUrl = os.getenv("BACKEND_URL")
             hash_data = {
                 "key": PAYU_KEY,
                 "txnid": txnid,
@@ -61,13 +62,12 @@ def paymentUrlGeneration(request):
                 "firstname": firstname,
                 "email": email,
                 "phone": phone,
-                "surl": "http://192.168.1.14:8000/payment/success/",
-                "furl": "http://192.168.1.14:8000/payment/error/",
+                "surl": f"{backendUrl}/payment/success/",
+                "furl": f"{backendUrl}/payment/error/",
             }
             hash_data["hash"] = generate_hash(hash_data)
             try:
-                
-                
+
                 paidMintsBuyerCollection.insert_one(
                     {
                         "userId": userId,

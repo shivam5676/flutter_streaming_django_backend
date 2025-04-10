@@ -20,6 +20,7 @@ app.conf.beat_schedule = {
         "task": "helper_function.autoCheckInPointAllotement.autoCheckInPointAllotement",
         "schedule": crontab(minute=0, hour=0),
     },
+ 
 }
 
 

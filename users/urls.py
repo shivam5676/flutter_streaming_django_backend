@@ -23,6 +23,7 @@ from .views.fetchWalletPoints import fetchWalletPoints
 from .views.forgotPassword import forgotPassword
 from .views.verifyOtp import verifyOtp
 from .views.updatePassword import updatePassword
+from .views.getUserMintsPurchaseHistory import getUserMintPurchaseHistory
 
 urlpatterns = [
     path("register/", createUser),
@@ -49,4 +50,5 @@ urlpatterns = [
     path("forgotPassword/", forgotPassword),
     path("verifyOtp/", verifyOtp),
     path("updatePassword/", updatePassword),
+    path("mintsPurchaseHistory/", getUserMintPurchaseHistory),
 ]

@@ -62,14 +62,14 @@ def googleAuth(request):
                     )
                 else:
 
-                    password = "hexagonal"
+                    password = ""
                     saveUserInDataBase(
                         {"name": name, "email": email, "password": password}
                     )
                     getSavedUser = users_collection.find_one(
                         {"email": email}, {"password": 0}
                     )
-                    print("get",getSavedUser)
+                    # print("get",getSavedUser)
                     if getSavedUser:
                         updatedUserResponse, token = updateLoginStatus(
                             getSavedUser, fcmtoken, deviceType
