@@ -23,3 +23,4 @@ mintsPlanCollection = db.mintsplans
 videoPurchasedLogs = db.videoPurchasedLogs
 userReactionLogs = db.userReactionLogs
 forgotPasswordRequests = db.forgotPasswordRequests
+continueWatching=db.continueWatching
